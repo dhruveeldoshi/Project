@@ -21,15 +21,45 @@ app.use(
   })
 );
 
-// Terminate acess tif user s not logged in.
-app.use("/private", async (req, res, next) => {
-  if (!req.session.id) {
-    // TODO: need to implement error file to reDirect or render
-    return res.redirect("/");
-  } else {
+//MIDDLEWARES
+//admin access middleware
+app.use("/admin", async (req, res, next) => {
+  if (req.session.admin) {
     next();
+  } else {
+    return res.redirect("/");
   }
 });
+
+// Terminate acess if user is not logged in.
+app.use("/users/details", async (req, res, next) => {
+  if (req.session.user) {
+    // TODO: need to implement error file to reDirect or render
+    next();
+  } else {
+    return res.render("pages/loginPage", { title: "first time" });
+  }
+});
+app.use((req, res, next) => {
+  date = new Date();
+  console.log(
+    `[${date.toUTCString()}]:\t${req.method}\t${req.originalUrl}\t\t${
+      req.session.user ? "(Authenticated)" : "(Not Authenticated)"
+    }`
+  );
+  next();
+});
+
+// // buy button middleware
+// //if logged in will add to cart , else go to login page.
+// app.use("/addToCart", async (req, res, next) => {
+//   if (!req.session.user) {
+//     return res.redirect("/login");
+//   } else {
+//     //buy button should trigger
+//     return res.redirect("/");
+//   }
+// });
 
 configRoutes(app);
 

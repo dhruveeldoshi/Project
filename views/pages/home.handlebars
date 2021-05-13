@@ -1,0 +1,106 @@
+<div id="div_search_bar">
+  <form
+    class="form-inline my-2 my-lg-0"
+    id="searchForm"
+    action="/search"
+    method="POST"
+  >
+    <input
+      id="search_bar"
+      class="form-control mr-sm-2"
+      type="search"
+      placeholder="Search"
+      aria-label="Search"
+      name="searchTerm"
+    />
+    <button
+      id="search_submit"
+      class="btn my-2 my-sm-0"
+      type="submit"
+    >Search</button>
+  </form>
+</div>
+
+<!-- Example single danger button -->
+
+<div class="div_dropdown">
+  <div class="dropdown show btn-group" id="ddl_plants">
+    <a
+      class="btn btn-secondary dropdown-toggle"
+      href="#"
+      role="button"
+      id="dropdownMenuLink"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      Select Product Type
+    </a>
+
+    <div
+      class="dropdown-menu"
+      id="displayProp"
+      aria-labelledby="dropdownMenuLink"
+    >
+    </div>
+  </div>
+
+</div>
+
+<div id="filterDiv">
+
+</div>
+
+{{!-- <div class="container" id="#productDiv">
+  <div class="row" id="productList">
+    {{#each productList}}
+      <div class="col bg-success">
+        <a
+          href="/products/product/{{this._id}}"
+          class="product_click"
+          data-id="{{this._id}}"
+        >
+          {{this.title}}
+          <p><img
+              src="{{this.productImage}}"
+              href=""
+              height="100"
+              width="100"
+            /></p>
+          <p>Price:{{this.price}}</p>
+        </a>
+      </div>
+    {{/each}}
+  </div>
+
+</div> --}}
+
+{{!  }}
+<div class="container">
+  <div class="row">
+    {{#each productList}}
+
+      <section class="col-lg-4 col-md-4 col-sm-7 col-xs-12">
+        <div class="mx-3 mt-4 card">
+          <img
+            class="card-img-top"
+            src={{this.productImage}}
+            alt="{{this.title}} Image"
+          />
+          <div class="card-body">
+            <h2 class="card-title">Title: {{this.title}}</h2>
+            <p class="card-text">Price: {{this.price}}</p>
+
+          </div>
+          <div class="card-footer">
+            <a
+              class="btn btn-primary text-center"
+              href="products/product/{{this._id}}"
+              data-id="{{this._id}}"
+            > Buy </a>
+          </div>
+        </div>
+      </section>
+    {{/each}}
+  </div>
+</div>
