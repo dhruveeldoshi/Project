@@ -157,13 +157,13 @@
   background-color: #28a745;
   /* margin-bottom: 28%; */
 }
-.container {
-  background-color: #dffbaa94;
-  height: auto;
-  padding-top: 3%;
-  margin-top: 2%;
-  padding-bottom: 3%;
-}
+
+/* .container {
+  /* background-color: #dffbaa94; */
+/* height: 350px; */
+/* padding-top: 3%; */
+/* margin-top: 2%; */
+/* } */
 
 .home-section--title {
   font-size: 20px;
@@ -229,6 +229,7 @@ ul {
 .home_link:hover {
   background-color: #edfcce;
   color: #fff;
+
 }
 
 #liked {
@@ -248,6 +249,7 @@ ul {
   background-color: #fff!important;
   border-style:groove;
   padding: 2%;
+
 }
 
 #productList{
