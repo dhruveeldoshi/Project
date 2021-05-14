@@ -60,6 +60,7 @@ router.delete("/product/:id", async (req, res) => {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     const product = await productsData.getProductById(req.params.id);
     await productsData.deleteProduct(req.params.id, product.stock);
+
     return res.json(product);
 
   } catch (error) {
@@ -90,7 +91,6 @@ router.get("/", async (req, res) => {
 //to get product by Id provided
 router.get("/products/product/:id", async (req, res) => {
   try {
-
     // if (req.session.user) {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     let product = await productsData.getProductById(req.params.id);
@@ -148,21 +148,6 @@ router.patch("/product/dislike/:id", async (req, res) => {
   try {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     if (req.session.user) {
-
-      await productsData.addDisLike(req.params.id, req.session.user._id);
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(404);
-    }
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(404);
-  }
-});
-router.patch("/product/dislike/:id", async (req, res) => {
-  try {
-    errorHandler.checkStringObjectId(req.params.id, "Product ID");
-    if (req.session.user) {
       await productsData.addDisLike(req.params.id, req.session.user._id);
       res.sendStatus(200);
     } else {
@@ -175,7 +160,8 @@ router.patch("/product/dislike/:id", async (req, res) => {
 });
 
 router.patch("/product/comment/:id", async (req, res) => {
-  const comment_text = xss(req.body);
+  const comment_text = req.body.review;
+
   try {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     errorHandler.checkString(xss(req.body));
@@ -265,7 +251,11 @@ router.get("/cart/", async (req, res) => {
       for (i of unique) {
         productsList.push(await productsData.getProductById(i));
       }
-      res.json(productsList);
+      // res.json(productsList);
+      return res.render("pages/cart", {
+        productsList: productsList,
+      });
+
     } else {
       res.sendStatus(404);
     }

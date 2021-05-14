@@ -112,16 +112,7 @@ $(document).ready(function () {
         location.reload();
       },
       error: function () {},
-// <<<<<<< dhruveel-test
-//     });
-//   });
 
-//   $(".product_click").on("click", function (e) {
-//     var id = $(this).attr("data-id");
-//     $.ajax({
-//       url: "/products/product/" + id, // url where to submit the request
-//       type: "GET", // type of action POST || GET
-// =======
     });
   });
 
@@ -143,24 +134,31 @@ $(document).ready(function () {
     $.ajax({
       url: "/addtocart/" + id, // url where to submit the request
       type: "patch", // type of action POST || GET
-// >>>>>>> master
+
       success: function (data) {
         window.location.href = "http://localhost:3000/products/product/" + id;
       },
       error: function () {},
     });
   });
-// <<<<<<< dhruveel-test
 
-//   $(".buy_now").on("click", function (e) {
-//     var id = $(this).attr("data-id");
-//     alert("Product has beed added to Cart");
-//     $.ajax({
-//       url: "/product/addtocart/" + id, // url where to submit the request
-//       type: "patch", // type of action POST || GET
-//       success: function (data) {
-//         console.log("now");
-// =======
+  $("#cart_btn").on("click", function (e) {
+    $.ajax({
+      url: "/cart/", // url where to submit the request
+      type: "get", // type of action POST || GET
+      success: function (data) {
+        window.location.href = "http://localhost:3000/cart/";
+      },
+      error: function () {},
+    });
+  });
+
+  $("#confirmation").on("click", function (e) {
+    alert("Purchase done sucessfully");
+    window.location.href = "http://localhost:3000/";
+   
+  });
+
 
   $(".add_review").on("click", function (e) {
     e.preventDefault();
@@ -173,24 +171,12 @@ $(document).ready(function () {
       type: "patch", // type of action POST || GET
       data: { review: review },
       success: function (data) {
-// >>>>>>> master
         window.location.href = "http://localhost:3000/products/product/" + id;
       },
       error: function () {},
     });
   });
-// <<<<<<< dhruveel-test
 
-//   $(".add_review").on("click", function (e) {
-//     alert("dssadasf");
-//     var id = $(this).attr("data-id");
-//     $.ajax({
-//       url: "/product/comment/" + id, // url where to submit the request
-//       type: "patch", // type of action POST || GET
-//       success: function (data) {
-//         alert("dsfdfsf");
-//         window.location.href = "http://localhost:3000/products/product/" + id;
-// =======
 
   $(".product_like").on("click", function (e) {
     e.preventDefault();
@@ -221,18 +207,5 @@ $(document).ready(function () {
     }
   });
 
-  $("#cart_btn").on("click", function (e) {
-    var id = "609a9ffbe959bc914a4a5655";
-    alert("eyreuty");
-    $.ajax({
-      url: "/addtocart/" + id, // url where to submit the request
-      type: "patch", // type of action POST || GET
-      success: function (data) {
-        alert("noxvcxvw");
-        window.location.href = "http://localhost:3000/addtocart/" + id;
-// >>>>>>> master
-      },
-      error: function () {},
-    });
-  });
+  
 });
