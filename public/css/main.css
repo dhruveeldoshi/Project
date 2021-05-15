@@ -117,7 +117,7 @@
 }
 
 #navbarNav {
-  margin-left: 75%;
+  margin-left: 60%;
 }
 .navbar-light .navbar-brand {
   color: #fff;
@@ -127,7 +127,13 @@
   border-color: #fff;
 }
 #user_signup {
-  margin-left: 5%;
+  margin-left: 1%;
+}
+#user_login{
+  margin-right: 3%;
+}
+#user_logout{
+  margin-left: 65%;
 }
 #div_search_bar {
   width: 70%;
@@ -267,4 +273,24 @@ ul {
 .cart_fields{
   color:#000;
 }
+.cart_h3{
+  color:#28a745;
+}
 
+#admin_modal{
+  margin-right: 4%;
+}
+
+#user_container {
+  background-color: #dffbaa94;
+  height: auto;
+  padding-top: 2%;
+  margin-top: 2%;
+}
+#user_htag{
+  text-align: center;
+}
+
+.user_ptag{
+  font-size: 20px;
+}

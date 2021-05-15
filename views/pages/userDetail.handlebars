@@ -1,8 +1,9 @@
-<h1>{{userInfo.firstName}} {{userInfo.lastName}}</h1>
 
-<div class="container">
+<div class="container" id="user_container">
+<h1 id="user_htag">{{userInfo.firstName}} {{userInfo.lastName}}</h1>
+
   {{#if purchase}}
-    <h2>Purchase History</h2>
+    <p class="user_ptag">Purchase History</p>
     <ul>
       {{#each purchase}}
         <li
@@ -14,7 +15,7 @@
   {{!  }}
 
   {{#if comments}}
-    <h2>Comments</h2>
+    <p class="user_ptag">Comments</p>
 
     <ul>
       {{#each comments}}
@@ -28,7 +29,7 @@
   {{/if}}
   {{!  }}
   {{#if viewdProduct}}
-    <h2>Viewd Products</h2>
+    <p class="user_ptag">Viewd Products</p>
 
     <ul>
       {{#each viewdProduct}}
@@ -41,7 +42,7 @@
   {{/if}}
   {{!  }}
   {{#if liked}}
-    <h2>Liked Products</h2>
+    <p class="user_ptag">Liked Products</p>
 
     <ul>
       {{#each liked}}

@@ -254,6 +254,7 @@ router.get("/cart/", async (req, res) => {
       // res.json(productsList);
       return res.render("pages/cart", {
         productsList: productsList,
+        user: req.session.user
       });
 
     } else {
