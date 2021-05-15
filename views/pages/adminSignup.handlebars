@@ -33,6 +33,9 @@
           value="{{info.adminFirstName}}"
           required="required"
         />
+        <div class="invalid-feedback">
+          First name cannot be empty
+        </div>
       </div>
     </div>
 
@@ -50,6 +53,9 @@
           value="{{info.adminLastName}}"
           required="required"
         />
+        <div class="invalid-feedback">
+          Last name cannot be empty
+        </div>
       </div>
     </div>
     {{!  }}
@@ -64,7 +70,12 @@
           value="{{info.adminId}}"
           required="required"
         />
+        <div class="invalid-feedback">
+          email id cannot be empty
+        </div>
+
       </div>
+
     </div>
     {{!  }}
     <div class="form-group row">
@@ -77,6 +88,9 @@
           id="adminPassword"
           required="required"
         />
+        <div class="invalid-feedback">
+          Password cannot be empty
+        </div>
       </div>
     </div>
     {{!  }}
@@ -91,6 +105,9 @@
           id="secretPasscode"
           required="required"
         />
+        <div class="invalid-feedback">
+          secret pass code cannot be empty
+        </div>
       </div>
     </div>
 

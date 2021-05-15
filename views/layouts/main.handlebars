@@ -116,7 +116,13 @@
                 <form id="adminForm" action="/admin/adminLogin" method="post">
                   <div class="form-group">
                     <label class="text-primary" for="adminEmail">Admin Email</label>
-                    <input type="text" name="adminEmail" class="form-control" />
+                    <input
+                      type="email"
+                      name="adminEmail"
+                      class="form-control"
+                      id="adminEmail"
+                      required
+                    />
                   </div>
                   <div class="form-group">
                     <label class="text-primary" for="adminPassword">Admin
@@ -125,10 +131,17 @@
                       type="password"
                       name="adminPassword"
                       class="form-control"
+                      id="adminPassword"
                     />
+                    <div class="invalid-feedback">
+                      Admin email/ Password cannot be empty</div>
                   </div>
                   <div class="modal-footer">
-                    <input type="submit" class="btn btn-primary" />
+                    <input
+                      type="submit"
+                      class="btn btn-primary"
+                      id="adminLoginSubmit"
+                    />
                   </div>
 
                 </form>
@@ -188,5 +201,6 @@
 
     <script src="../../public/js/script.js"></script>
     <script src="../../public/js/homePage.js"></script>
+    <script src="../../public/js/adminLogin.js"></script>
   </body>
 </html>
