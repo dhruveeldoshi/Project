@@ -21,10 +21,10 @@
                 <div class="form-label-group">
                   <input
                     type="email"
-                    id="inputEmail"
                     class="form-control"
                     placeholder="Email address"
-                    name="email"
+                    name="inputEmail"
+                    id="email"
                     required
                     autofocus
                   />
@@ -34,12 +34,15 @@
                 <div class="form-label-group">
                   <input
                     type="password"
-                    id="inputPassword"
+                    id="password"
                     class="form-control"
                     placeholder="Password"
                     name="password"
                     required
                   />
+                  <div class="invalid-feedback">
+                    Password cannot be empty
+                  </div>
                   <label for="inputPassword">Password</label>
                 </div>
 
@@ -47,6 +50,7 @@
                   class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
                   type="submit"
                   value="submit"
+                  id="submitInfo"
                 />
                 <div class="container">
                   <h3 class="login-heading">New User:</h3>
@@ -66,3 +70,4 @@
   </div>
 </div>
 <hr />
+<script src="../../public/js/login.js" defer></script>

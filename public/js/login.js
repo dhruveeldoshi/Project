@@ -1,4 +1,4 @@
-$(document).ready(function () {
+(function ($) {
   let loginForm = $("#login-form");
   let emailInput = $("#email");
   let passwordInput = $("#password");
@@ -19,7 +19,7 @@ $(document).ready(function () {
 
     let hasErrors = false;
     if (!info.email || !info.password) {
-      usernameInput.addClass("is-invalid");
+      emailInput.addClass("is-invalid");
       passwordInput.addClass("is-invalid");
       hasErrors = true;
     }
@@ -30,4 +30,4 @@ $(document).ready(function () {
       submitInfo.prop("disabled", false);
     }
   });
-})(jQuery);
+})(window.jQuery);
