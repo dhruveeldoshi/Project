@@ -1,11 +1,32 @@
 <div Class="location">
-  <button type="button" class="btn btn-success">Home</button>
   <button type="button" class="btn btn-warning">User</button>
 </div>
 
 <div class="container" id="cart_container">
   <!--Section: Content-->
   <section class="col-md-12" id="single_prod_section">
+
+    {{#if hasProduct}}
+
+      {{#each productsList}}
+        <div class="row" id="cart_pg_row">
+          <h3 class="single_h3">{{this.title}}</h3>
+
+          <p><label class="cart_fields">Description</label>
+            {{this.description}}</p>
+          <div class="col-md-6">
+            <p><label class="cart_fields">Price</label> ${{this.price}}</p>
+          </div>
+          <div class="col-md-6">
+            <img src="{{this.productImage}}" class="" alt="" height="250px" />
+
+          </div>
+
+          <p>Customer Details: </p>
+          <h3 class="single_h3"> James Hills</h3>
+          <p><label class="cart_fields">Address:</label>
+            {{this.description}}</p>
+          <p><label class="cart_fields">Contact :</label> ########</p>
           <div>
             <h1>Cart Page</h1>
             <p class="cart_fields">Customer Details: </p>
@@ -33,6 +54,17 @@
         <div class="confirm_purchase">
            <button type="button" class="btn btn-primary" id="confirmation">Confirm Purchase</button>
         </div>
+      {{/each}}
+
+      <div class="confirm_purchase">
+        <button type="button" class="btn btn-primary" id="confirmation">Confirm
+          Purchase</button>
+      </div>
+
+    {{else}}
+      <p>Cart is empty! </p>
+
+    {{/if}}
 
   </section>
   <!--Section: Content-->

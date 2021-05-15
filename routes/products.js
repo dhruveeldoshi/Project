@@ -78,6 +78,7 @@ router.delete("/product/:id", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     let productList = await productsData.getAllProducts();
+    let hasProduct = false;
     if (productList.length > 0) {
       hasProduct = true;
     }
@@ -139,7 +140,6 @@ router.get("/products/product/:id", async (req, res) => {
 ////////////////////////////////////////////////////////////////
 router.patch("/product/like/:id", async (req, res) => {
   try {
-    console.log("edsx");
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     if (req.session.user) {
       await productsData.addLike(req.params.id, req.session.user._id);
@@ -297,9 +297,16 @@ router.get("/cart/", async (req, res) => {
       for (i of unique) {
         productsList.push(await productsData.getProductById(i));
       }
-      // res.json(productsList);
+
+      let hasProduct = false;
+
+      if (productsList.length > 0) {
+        hasProduct = true;
+      }
+
       return res.render("pages/cart", {
         productsList: productsList,
+        hasProduct: hasProduct,
         user: req.session.user,
       });
     } else {
@@ -358,6 +365,10 @@ router.post("/search", async (req, res) => {
     errorHandler.checkString(searchTerm);
     const productList = await productsData.searchProduct(searchTerm);
 
+    console.log(productList);
+
+    let hasProduct = false;
+
     if (productList.length > 0) {
       hasProduct = true;
     }
@@ -394,8 +405,6 @@ router.post("/filter", async (req, res) => {
         }
       }
     }
-
-    console.log(filterProp);
 
     errorHandler.checkFilterProperties(filterProp);
     const productList = await productsData.filterProducts(filterProp);
