@@ -41,6 +41,7 @@ app.use(
     secret: "Some secret",
     saveUninitialized: true,
     resave: false,
+    cartItems: [],
   })
 );
 

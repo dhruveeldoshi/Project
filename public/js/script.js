@@ -71,19 +71,24 @@ $(document).ready(function () {
       type: "POST", // type of action POST || GET
       dataType: "json", // data type
       data: body, // post data || get data
-      success: function (data) {
-        $("#error_msg").empty();
-        $("#exampleModalLong").hide();
-        $("#prod_modal_dialog").hide();
-        location.reload();
-        console.log("rfed");
-      },
-      error: function () {
-        $("#error_msg").empty();
-        $("#error_msg").append(
-          "<p>Error! Please enter a valid data to add the product.</p>"
-        );
-        console.log("rfd");
+
+      complete: function (e) {
+        if (e.status == 200) {
+          $("#error_msg").empty();
+          $("#exampleModalLong").hide();
+          $("#prod_modal_dialog").hide();
+          location.reload();
+        } else if (e.status == 400) {
+          $("#error_msg").empty();
+          $("#error_msg").append(
+            `<p>Error! ${JSON.parse(e.responseText)["error"]}</p>`
+          );
+        } else {
+          $("#error_msg").empty();
+          $("#error_msg").append(
+            "<p>Error! Please enter a valid data to add the product.</p>"
+          );
+        }
       },
     });
   });
@@ -112,16 +117,7 @@ $(document).ready(function () {
         location.reload();
       },
       error: function () {},
-// <<<<<<< dhruveel-test
-//     });
-//   });
 
-//   $(".product_click").on("click", function (e) {
-//     var id = $(this).attr("data-id");
-//     $.ajax({
-//       url: "/products/product/" + id, // url where to submit the request
-//       type: "GET", // type of action POST || GET
-// =======
     });
   });
 
@@ -143,24 +139,39 @@ $(document).ready(function () {
     $.ajax({
       url: "/addtocart/" + id, // url where to submit the request
       type: "patch", // type of action POST || GET
-// >>>>>>> master
+
       success: function (data) {
         window.location.href = "http://localhost:3000/products/product/" + id;
       },
       error: function () {},
     });
   });
-// <<<<<<< dhruveel-test
 
-//   $(".buy_now").on("click", function (e) {
-//     var id = $(this).attr("data-id");
-//     alert("Product has beed added to Cart");
-//     $.ajax({
-//       url: "/product/addtocart/" + id, // url where to submit the request
-//       type: "patch", // type of action POST || GET
-//       success: function (data) {
-//         console.log("now");
-// =======
+
+  $("#cart_btn").on("click", function (e) {
+    $.ajax({
+      url: "/cart/", // url where to submit the request
+      type: "get", // type of action POST || GET
+      success: function (data) {
+        window.location.href = "http://localhost:3000/cart/";
+      },
+      error: function () {},
+    });
+  });
+
+  $("#confirmation").on("click", function (e) {
+    alert("Purchase done sucessfully");
+    $.ajax({
+      url: "/buy", // url where to submit the request
+      type: "get", // type of action POST || GET
+      success: function (data) {
+        window.location.href = "http://localhost:3000/";
+      },
+      error: function () {},
+    });
+   
+  });
+
 
   $(".add_review").on("click", function (e) {
     e.preventDefault();
@@ -173,24 +184,13 @@ $(document).ready(function () {
       type: "patch", // type of action POST || GET
       data: { review: review },
       success: function (data) {
-// >>>>>>> master
+
         window.location.href = "http://localhost:3000/products/product/" + id;
       },
       error: function () {},
     });
   });
-// <<<<<<< dhruveel-test
 
-//   $(".add_review").on("click", function (e) {
-//     alert("dssadasf");
-//     var id = $(this).attr("data-id");
-//     $.ajax({
-//       url: "/product/comment/" + id, // url where to submit the request
-//       type: "patch", // type of action POST || GET
-//       success: function (data) {
-//         alert("dsfdfsf");
-//         window.location.href = "http://localhost:3000/products/product/" + id;
-// =======
 
   $(".product_like").on("click", function (e) {
     e.preventDefault();
@@ -230,9 +230,10 @@ $(document).ready(function () {
       success: function (data) {
         alert("noxvcxvw");
         window.location.href = "http://localhost:3000/addtocart/" + id;
-// >>>>>>> master
+        // >>>>>>> master
       },
       error: function () {},
     });
   });
+
 });

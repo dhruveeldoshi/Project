@@ -6,41 +6,33 @@
 <div class="container" id="cart_container">
   <!--Section: Content-->
   <section class="col-md-12" id="single_prod_section">
+          <div>
+            <h1>Cart Page</h1>
+            <p class="cart_fields">Customer Details: </p>
+            <p class="single_h3"><label class="cart_fields">Name:</label>  {{user.firstName}}</p>
+            <p><label class="cart_fields">Address:</label> {{user.address.Line1}},{{user.address.Line1}}</p>
+            <p><label class="cart_fields">Contact :</label>{{user.mobile}}</p>
+            <label class="cart_fields">City :</label>{{user.address.City}}
+            <label class="cart_fields">State :</label> {{user.address.State}}
+            <label class="cart_fields">Zipcode :</label> {{user.address.ZipCode}}
+            </div>
+            {{#each productsList}}
+              <div class="row" id="cart_pg_row">
+                  <div class="col-md-6">
+                  <h2 class="single_h3">{{this.title}}</h2>
 
-    <!--Grid row-->
-    <div class="row">
-
-      <!--Grid column-->
-      <div class="col-md-8">
-        <div class="row">
-          <h3 class="single_h3">{{product.title}} : Water Plant</h3>
-          <p class="">{{product.description}}</p>
-          <p>Price : $50</p>
+                    <p><label class="cart_fields">Description</label> {{this.description}}</p>
+                    <p><label class="cart_fields">Price</label>  ${{this.price}}</p>
+                  </div>
+                  <div class="col-md-6">
+                  <img src="{{this.productImage}}" class="" alt="cart img" height="250px" />
+                  </div>
+              </div>
+            {{/each}}
+        
+        <div class="confirm_purchase">
+           <button type="button" class="btn btn-primary" id="confirmation">Confirm Purchase</button>
         </div>
-        <div class="row" id="user_details">
-          <p>Customer Details: </p>
-          <h5 class="single_h3"> James Hills</h5>
-          <p class="">Address: {{product.description}}</p>
-          <p class="">Contact : ########</p>
-
-        </div>
-      </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
-      <div class="col-md-4">
-        <!--Image-->
-        <div class="view overlay">
-          <img src="{{product.productImage}}" class="img-fluid" alt="" />
-          <a href="#">
-            <div class=""></div>
-          </a>
-        </div>
-      </div>
-      <!--Grid column-->
-
-    </div>
-    <!--Grid row-->
 
   </section>
   <!--Section: Content-->
