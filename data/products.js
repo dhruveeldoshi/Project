@@ -285,8 +285,10 @@ let exportedMethods = {
     const productsCollection = await products();
 
     const product = await this.getProductById(productID);
+    console.log("gvjhbj")
 
     if (product.stock == 1) {
+
       this.deleteProduct(product._id);
     } else {
       const updatedInfo = await productsCollection.updateOne(
@@ -333,6 +335,7 @@ let exportedMethods = {
     const productType = require("./index").productType;
     const productsCollection = await products();
     const product = await this.getProductById(productID);
+
     const deletedInfo = await productsCollection.deleteOne({
       _id: ObjectId(productID),
     });

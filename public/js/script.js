@@ -150,7 +150,16 @@ $(document).ready(function () {
 
   $("#confirmation").on("click", function (e) {
     alert("Purchase done sucessfully");
-    window.location.href = "http://localhost:3000/";
+
+    $.ajax({
+      url: "/buy", // url where to submit the request
+      type: "get", // type of action POST || GET
+      success: function (data) {
+        window.location.href = "http://localhost:3000/";
+      },
+      error: function () {},
+    });
+   
   });
 
   $(".add_review").on("click", function (e) {
