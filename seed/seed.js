@@ -407,9 +407,6 @@ async function main() {
   const c4 = await comments.addComment(user2._id, product4, "so good.");
 
   const c1Info = await comments.getComment(c1);
-  console.log(c1Info);
-
-  console.log("+");
 
   // const commentsList = await products.getProductComments(product2);
   // console.log(commentsList);
@@ -426,9 +423,6 @@ async function main() {
     product_type: "plant",
   };
 
-  console.log(await products.filterProducts(prop_));
-
-  console.log("EFDc");
   await admin.addAdmin(
     "Hanish",
     "Rohit",
@@ -438,7 +432,6 @@ async function main() {
 
   //   await products.deleteProduct(product1, 34);
   //   await products.deleteProduct(product6, 24);
-  console.log("FEd");
   await db.serverConfig.close();
 }
 
