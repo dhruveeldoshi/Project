@@ -98,41 +98,40 @@ router.get("/", async (req, res) => {
 //to get product by Id provided
 router.get("/products/product/:id", async (req, res) => {
   try {
-    // if (req.session.user) {
-    errorHandler.checkStringObjectId(req.params.id, "Product ID");
-    let product = await productsData.getProductById(req.params.id);
-    const productComments = await productsData.getProductComments(
-      req.params.id
-    );
+    if (req.session.user) {
+      errorHandler.checkStringObjectId(req.params.id, "Product ID");
+      let product = await productsData.getProductById(req.params.id);
+      const productComments = await productsData.getProductComments(
+        req.params.id
+      );
 
-    const commentList = [];
-    for (comment of productComments) {
-      commentList.push(comment.commentText);
+      const commentList = [];
+      for (comment of productComments) {
+        commentList.push(comment.commentText);
+      }
+
+      await usersData.userViewsAProduct(
+        "609a2fca59ef0ecfeb7b57af",
+        req.params.id
+      );
+
+      let hascomments = true;
+
+      if (commentList.length == 0) {
+        hascomments = false;
+      }
+
+      res.render("pages/singleProduct", {
+        authenticated: req.session.user ? true : false,
+        adminAuth: req.session.admin ? true : false,
+        title: product.title,
+        product: product,
+        comments: commentList,
+        hascomments: hascomments,
+      });
+    } else {
+      return res.sendStatus(404).json({ message: "User not Authenticated" });
     }
-
-    await usersData.userViewsAProduct(
-      "609a2fca59ef0ecfeb7b57af",
-      req.params.id
-    );
-
-    let hascomments = true;
-
-    if (commentList.length == 0) {
-      hascomments = false;
-    }
-
-    res.render("pages/singleProduct", {
-      authenticated: req.session.user ? true : false,
-      adminAuth: req.session.admin ? true : false,
-      title: product.title,
-      product: product,
-      comments: commentList,
-      hascomments: hascomments,
-    });
-
-    // } else {
-    //   res.sendStatus(404).json({ message: "User not Authenticated" });
-    // }
   } catch (e) {
     return res.status(404).json({ error: "product not found" });
   }
@@ -250,7 +249,7 @@ router.get("/buy", async (req, res) => {
 });
 
 router.patch("/product/comment/:id", async (req, res) => {
-  const comment_text = req.body.review;
+  const comment_text = xss(req.body.review);
   try {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     errorHandler.checkString(comment_text);
@@ -260,29 +259,32 @@ router.patch("/product/comment/:id", async (req, res) => {
         req.params.id,
         comment_text
       );
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } else {
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
   } catch (error) {
     console.log(error);
-    res.sendStatus(404);
+    return res.sendStatus(404);
   }
 });
 
 router.patch("/addtocart/:id", async (req, res) => {
+  console.log("edws");
+  // if (req.session.user == "undefined") {
+  //   res.redirect("/");
+  // }
   try {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     if (req.session.user) {
-      console.log(req.session);
       req.session.cartItems.push(req.params.id);
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } else {
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
   } catch (error) {
     console.log(error);
-    res.sendStatus(404);
+    return res.sendStatus(404);
   }
 });
 ////////////////

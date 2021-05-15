@@ -167,7 +167,7 @@ router.post("/login", async (req, res) => {
       req.session.cartItems = [];
       return res.redirect("/users/details");
 
-      return res.redirect("/");
+      // return res.redirect("/");
     } else {
       errors.push("User E-mail address or password does not match");
       return res.render("pages/loginPage", {
@@ -192,50 +192,51 @@ router.get("/signup", async (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-  dataSignIn = req.body;
-  const firstName = xss(dataSignIn.firstName);
-  const lastName = xss(dataSignIn.lastName);
-  const email = xss(dataSignIn.emailId);
-  const password = xss(dataSignIn.password);
-  const phoneNumber = xss(dataSignIn.phoneNumber);
-  const Line1 = xss(dataSignIn.Line1);
-  const Line2 = xss(dataSignIn.Line2);
-  const City = xss(dataSignIn.City);
-  const State = xss(dataSignIn.State);
-  const ZipCode = xss(dataSignIn.ZipCode);
-
-  errors = [];
-  if (!errorCheck.stringCheck(firstName))
-    errors.push("Invalid FirstName (routes/users)");
-  if (!errorCheck.stringCheck(lastName))
-    errors.push("Invalid LastName (routes/users)");
-  if (!errorCheck.emailValidate(email))
-    errors.push("Invalid Email (routes/users)");
-  if (!errorCheck.validPassword(password))
-    errors.push("Invalid Password (routes/users)");
-  if (!errorCheck.phoneNumberValid(phoneNumber))
-    errors.push("Invalid PhoneNumber (routes/users)");
-  if (!errorCheck.stringCheck(Line1))
-    errors.push("Invalid LineOne (routes/users )");
-
-  if (!errorCheck.stringCheck(Line2))
-    errors.push("Invalid LineTwo (routes/users )");
-  if (!errorCheck.stringCheck(City))
-    errors.push("Invalid City (routes/users )");
-
-  if (!errorCheck.stringCheck(State))
-    errors.push("Invalid State routes/users )");
-  if (!errorCheck.zipcCodeValid(ZipCode))
-    errors.push("Invalid Zip Code (routes/users )");
-  address = {
-    Line1: Line1,
-    Line2: Line2,
-    City: City,
-    State: State,
-    ZipCode: parseInt(ZipCode),
-    Country: "USA",
-  };
   try {
+    dataSignIn = req.body;
+    const firstName = xss(dataSignIn.firstName);
+    const lastName = xss(dataSignIn.lastName);
+    const email = xss(dataSignIn.emailId);
+    const password = xss(dataSignIn.password);
+    const phoneNumber = xss(dataSignIn.phoneNumber);
+    const Line1 = xss(dataSignIn.Line1);
+    const Line2 = xss(dataSignIn.Line2);
+    const City = xss(dataSignIn.City);
+    const State = xss(dataSignIn.State);
+    const ZipCode = xss(dataSignIn.ZipCode);
+
+    errors = [];
+    if (!errorCheck.stringCheck(firstName))
+      errors.push("Invalid FirstName (routes/users)");
+    if (!errorCheck.stringCheck(lastName))
+      errors.push("Invalid LastName (routes/users)");
+    if (!errorCheck.emailValidate(email))
+      errors.push("Invalid Email (routes/users)");
+    if (!errorCheck.validPassword(password))
+      errors.push("Invalid Password (routes/users)");
+    if (!errorCheck.phoneNumberValid(phoneNumber))
+      errors.push("Invalid PhoneNumber (routes/users)");
+    if (!errorCheck.stringCheck(Line1))
+      errors.push("Invalid LineOne (routes/users )");
+
+    if (!errorCheck.stringCheck(Line2))
+      errors.push("Invalid LineTwo (routes/users )");
+    if (!errorCheck.stringCheck(City))
+      errors.push("Invalid City (routes/users )");
+
+    if (!errorCheck.stringCheck(State))
+      errors.push("Invalid State routes/users )");
+    if (!errorCheck.zipcCodeValid(ZipCode))
+      errors.push("Invalid Zip Code (routes/users )");
+    address = {
+      Line1: Line1,
+      Line2: Line2,
+      City: City,
+      State: State,
+      ZipCode: parseInt(ZipCode),
+      Country: "USA",
+    };
+
     dataError.checkAddress(address);
     // Just for woking part I'm throwing JSON error
     if (errors.length > 0) {
@@ -248,14 +249,11 @@ router.post("/signup", async (req, res) => {
     }
 
     const allUsers = await usersData.getAllUsers();
-    let emailUsed;
+    let emailUsed = false;
     allUsers.find((user) => {
       if (user.emailId === email.toLowerCase()) {
         emailUsed = true;
 
-        return emailUsed;
-      } else {
-        emailUsed = false;
         return emailUsed;
       }
     });

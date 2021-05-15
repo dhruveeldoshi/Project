@@ -134,15 +134,18 @@ $(document).ready(function () {
 
   $(".buy_now").on("click", function (e) {
     var id = $(this).attr("data-id");
-    alert("Product has beed added to Cart");
+
     $.ajax({
       url: "/addtocart/" + id, // url where to submit the request
       type: "patch", // type of action POST || GET
 
       success: function (data) {
+        alert("Product has beed added to Cart");
         window.location.href = "http://localhost:3000/products/product/" + id;
       },
-      error: function () {},
+      error: function () {
+        window.location.href = "/users/form";
+      },
     });
   });
 
@@ -168,7 +171,6 @@ $(document).ready(function () {
       },
       error: function () {},
     });
-   
   });
 
   $(".add_review").on("click", function (e) {
@@ -184,7 +186,9 @@ $(document).ready(function () {
       success: function (data) {
         window.location.href = "http://localhost:3000/products/product/" + id;
       },
-      error: function () {},
+      error: function () {
+        window.location.href = "/users/form";
+      },
     });
   });
 
@@ -201,7 +205,9 @@ $(document).ready(function () {
           $("#unliked").attr("id", "liked");
           userLiked = false;
         },
-        error: function () {},
+        error: function () {
+          window.location.href = "/users/form";
+        },
       });
     } else {
       $.ajax({
@@ -212,7 +218,9 @@ $(document).ready(function () {
           $("#liked").attr("id", "unliked");
           userLiked = true;
         },
-        error: function () {},
+        error: function () {
+          window.location.href = "/users/form";
+        },
       });
     }
   });

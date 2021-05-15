@@ -64,7 +64,6 @@
     if (!validString(info.zipCode)) zipCodeInput.addClass("is-invalid");
 
     if (!hasErrors) {
-      alert("in !if");
       signupForm.unbind().submit();
     } else {
       submitInfo.prop("disabled", false);

@@ -19,7 +19,7 @@
           </label>
           <input type="text" name="review" />
           <button
-            class="add_review"
+            class="add_review btn btn-success"
             type="submit"
             data-id="{{product._id}}"
           >Submit</button>
@@ -81,7 +81,12 @@
       <div class="col-md-6 mb-4 mb-md-0">
         <!--Image-->
         <div class="view overlay z-depth-1-half">
-          <img src="{{product.productImage}}" class="" alt="single product" height="250px" />
+          <img
+            src="{{product.productImage}}"
+            class=""
+            alt="single product"
+            height="250px"
+          />
           <a href="#">
             <div class="mask rgba-white-light"></div>
           </a>
