@@ -18,6 +18,7 @@ router.get("/form", async (req, res) => {
 
     return res.render("pages/loginPage", {
       authenticated: false,
+      adminAuth: req.session.admin ? true : false,
       title: "First",
     });
   }
@@ -71,6 +72,7 @@ router.get("/details", async (req, res) => {
       return res.render("pages/userDetail", {
         title: "User Info page",
         authenticated: true,
+        adminAuth: req.session.admin ? true : false,
         userInfo: userInfo,
         comments: userComments,
         // likes: userLikes,
@@ -122,6 +124,7 @@ router.post("/login", async (req, res) => {
   if (req.session.user) {
     return res.render("pages/userDetail", {
       authenticated: req.session.user ? true : false,
+      adminAuth: req.session.admin ? true : false,
       title: "Already In",
     });
   } else {
@@ -160,13 +163,13 @@ router.post("/login", async (req, res) => {
     if (match) {
       req.session.user = userClient;
       console.log(req.session.user);
-      // let comp = req.session.previousRoute;
-      // if (comp) {
-      req.session.previousRoute = "";
-      req.session.cartItems = [];
-      return res.redirect("/users/details");
-      // }
-      // return res.redirect("/products");
+      let comp = req.session.previousRoute;
+      if (comp) {
+        req.session.previousRoute = "";
+        req.session.cartItems = [];
+        return res.redirect("/users/details");
+      }
+      return res.redirect("/");
     } else {
       errors.push("User E-mail address or password does not match");
       return res.render("pages/loginPage", {
@@ -186,6 +189,7 @@ router.get("/signup", async (req, res) => {
   return res.render("pages/signUp", {
     title: "SignUp Page",
     authenticated: false,
+    adminAuth: req.session.admin ? true : false,
   });
 });
 
@@ -274,6 +278,7 @@ router.post("/signup", async (req, res) => {
       req.session.user = newUser;
       return res.render("pages/loginPage", {
         authenticated: true,
+        adminAuth: req.session.admin ? true : false,
         title: "signIn Done",
       });
     } else {

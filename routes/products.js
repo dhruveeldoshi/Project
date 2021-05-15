@@ -4,16 +4,16 @@ const data = require("../data");
 const productsData = data.products;
 const commentsData = data.comments;
 const productType = data.productType;
+const xss = require("xss");
 
 const errorHandler = require("../Error/DatabaseErrorHandling");
 const { get, route } = require("./users");
 
 router.post("/product", async (req, res) => {
-  const productInfo = req.body;
+  const productInfo = xss(req.body);
 
   productInfo["price"] = parseFloat(productInfo.price);
   productInfo["stock"] = parseInt(productInfo.stock);
-
 
   console.log(productInfo.productImage);
 
@@ -61,7 +61,6 @@ router.delete("/product/:id", async (req, res) => {
     const product = await productsData.getProductById(req.params.id);
     await productsData.deleteProduct(req.params.id, product.stock);
     return res.json(product);
-
   } catch (error) {
     console.log(error);
     return res.status(404);
@@ -78,6 +77,7 @@ router.get("/", async (req, res) => {
 
     return res.render("pages/home", {
       authenticated: req.session.user ? true : false,
+      adminAuth: req.session.admin ? true : false,
       title: "All Product List",
       productList: productList,
       hasProduct: hasProduct,
@@ -90,7 +90,6 @@ router.get("/", async (req, res) => {
 //to get product by Id provided
 router.get("/products/product/:id", async (req, res) => {
   try {
-
     // if (req.session.user) {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     let product = await productsData.getProductById(req.params.id);
@@ -115,6 +114,8 @@ router.get("/products/product/:id", async (req, res) => {
     }
 
     res.render("pages/singleProduct", {
+      authenticated: req.session.user ? true : false,
+      adminAuth: req.session.admin ? true : false,
       title: product.title,
       product: product,
       comments: commentList,
@@ -148,7 +149,6 @@ router.patch("/product/dislike/:id", async (req, res) => {
   try {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     if (req.session.user) {
-
       await productsData.addDisLike(req.params.id, req.session.user._id);
       res.sendStatus(200);
     } else {
@@ -185,7 +185,11 @@ router.patch("/product/comment/:id", async (req, res) => {
         req.params.id,
         comment_text
       );
-      return res.render("/pages/singleProduct", { title: "Product" });
+      return res.render("/pages/singleProduct", {
+        title: "Product",
+        adminAuth: req.session.admin,
+        authenticated: req.session.user,
+      });
     } else {
       return res.sendStatus(404);
     }
@@ -217,8 +221,7 @@ router.get("/buy", async (req, res) => {
 });
 
 router.patch("/product/comment/:id", async (req, res) => {
-
-  const comment_text = req.body.review;
+  const comment_text = xss(req.body.review);
   try {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     errorHandler.checkString(comment_text);
@@ -228,16 +231,15 @@ router.patch("/product/comment/:id", async (req, res) => {
         req.params.id,
         comment_text
       );
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } else {
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
   } catch (error) {
     console.log(error);
-    res.sendStatus(404);
+    return res.sendStatus(404);
   }
 });
-
 
 router.patch("/addtocart/:id", async (req, res) => {
   try {
@@ -316,7 +318,7 @@ router.get("/properties/:type", async (req, res) => {
 
 router.post("/search", async (req, res) => {
   console.log("hello");
-  const searchTerm = req.body.searchTerm;
+  const searchTerm = xss(req.body.searchTerm);
   try {
     errorHandler.checkString(searchTerm);
     const productList = await productsData.searchProduct(searchTerm);
@@ -326,6 +328,7 @@ router.post("/search", async (req, res) => {
     }
     return res.render("pages/home", {
       authenticated: req.session.user ? true : false,
+      adminAuth: req.session.admin ? true : false,
       title: "All Product List",
       productList: productList,
       hasProduct: hasProduct,
@@ -337,7 +340,7 @@ router.post("/search", async (req, res) => {
 });
 
 router.post("/filter", async (req, res) => {
-  const filterProp = req.body;
+  const filterProp = xss(req.body);
   try {
     const productTypesList = await productType.getProductTypes();
 
@@ -365,6 +368,7 @@ router.post("/filter", async (req, res) => {
 
     return res.render("pages/home", {
       authenticated: req.session.user ? true : false,
+      adminAuth: req.session.admin ? true : false,
       title: "All Product List",
       productList: productList,
       hasProduct: hasProduct,
