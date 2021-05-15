@@ -245,7 +245,7 @@ ul {
   color: green;
 }
 
-#productPropHeading {
+.productPropHeading {
   font-weight: 500;
   color: red;
 }

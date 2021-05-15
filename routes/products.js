@@ -253,6 +253,7 @@ router.get("/cart/", async (req, res) => {
         user: req.session.user,
         total: totalPrice,
         authenticated: true,
+        title: "Cart Page",
       });
     } else {
       res.redirect("/");
