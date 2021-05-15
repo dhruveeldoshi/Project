@@ -54,7 +54,7 @@ router.post("/product", async (req, res) => {
     res.status(500).json({ error: "Product was not added" });
   }
 });
-
+////////////////////////////////
 router.delete("/product/:id", async (req, res) => {
   try {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
@@ -66,7 +66,7 @@ router.delete("/product/:id", async (req, res) => {
     return res.status(404);
   }
 });
-
+////////////////////////////////
 //to get all products to display on root route
 router.get("/", async (req, res) => {
   try {
@@ -86,7 +86,7 @@ router.get("/", async (req, res) => {
     return res.sendStatus(400);
   }
 });
-
+////////////////////////////////////////
 //to get product by Id provided
 router.get("/products/product/:id", async (req, res) => {
   try {
@@ -129,7 +129,7 @@ router.get("/products/product/:id", async (req, res) => {
     return res.status(404).json({ error: "product not found" });
   }
 });
-
+////////////////////////////////////////////////////////////////
 router.patch("/product/like/:id", async (req, res) => {
   try {
     console.log("edsx");
@@ -145,35 +145,36 @@ router.patch("/product/like/:id", async (req, res) => {
     res.sendStatus(404);
   }
 });
+//////////////////////////////////////////
 router.patch("/product/dislike/:id", async (req, res) => {
   try {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     if (req.session.user) {
       await productsData.addDisLike(req.params.id, req.session.user._id);
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } else {
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
   } catch (error) {
     console.log(error);
-    res.sendStatus(404);
+    return res.sendStatus(404);
   }
 });
-router.patch("/product/dislike/:id", async (req, res) => {
-  try {
-    errorHandler.checkStringObjectId(req.params.id, "Product ID");
-    if (req.session.user) {
-      await productsData.addDisLike(req.params.id, req.session.user._id);
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(404);
-    }
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(404);
-  }
-});
-
+// router.patch("/product/dislike/:id", async (req, res) => {
+//   try {
+//     errorHandler.checkStringObjectId(req.params.id, "Product ID");
+//     if (req.session.user) {
+//       await productsData.addDisLike(req.params.id, req.session.user._id);
+//       return res.sendStatus(200);
+//     } else {
+//       return res.sendStatus(404);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return res.sendStatus(404);
+//   }
+// });
+///////////////////////////////
 router.patch("/product/comment/:id", async (req, res) => {
   const comment_text = xss(req.body);
   try {
@@ -185,7 +186,7 @@ router.patch("/product/comment/:id", async (req, res) => {
         req.params.id,
         comment_text
       );
-      return res.render("/pages/singleProduct", {
+      return res.render("pages/singleProduct", {
         title: "Product",
         adminAuth: req.session.admin,
         authenticated: req.session.user,
@@ -198,7 +199,29 @@ router.patch("/product/comment/:id", async (req, res) => {
     return res.sendStatus(404);
   }
 });
+//////////////////
+// router.patch("/product/comment/:id", async (req, res) => {
+//   const comment_text = xss(req.body.review);
+//   try {
+//     errorHandler.checkStringObjectId(req.params.id, "Product ID");
+//     errorHandler.checkString(comment_text);
+//     if (req.session.user) {
+//       await commentsData.addComment(
+//         req.session.user._id,
+//         req.params.id,
+//         comment_text
+//       );
+//       return res.sendStatus(200);
+//     } else {
+//       return res.sendStatus(404);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return res.sendStatus(404);
+//   }
+// });
 
+/////////////////
 router.get("/buy", async (req, res) => {
   try {
     if (req.session.user) {
@@ -219,27 +242,7 @@ router.get("/buy", async (req, res) => {
     return res.status(404).json({ message: error });
   }
 });
-
-router.patch("/product/comment/:id", async (req, res) => {
-  const comment_text = xss(req.body.review);
-  try {
-    errorHandler.checkStringObjectId(req.params.id, "Product ID");
-    errorHandler.checkString(comment_text);
-    if (req.session.user) {
-      await commentsData.addComment(
-        req.session.user._id,
-        req.params.id,
-        comment_text
-      );
-      return res.sendStatus(200);
-    } else {
-      return res.sendStatus(404);
-    }
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(404);
-  }
-});
+///////////
 
 router.patch("/addtocart/:id", async (req, res) => {
   try {
@@ -256,6 +259,7 @@ router.patch("/addtocart/:id", async (req, res) => {
     res.sendStatus(404);
   }
 });
+////////////////
 
 router.get("/cart/", async (req, res) => {
   try {
@@ -291,6 +295,7 @@ router.get("/producttypes", async (req, res) => {
     res.sendStatus(404);
   }
 });
+////////////
 
 router.get("/properties/:type", async (req, res) => {
   try {
@@ -315,6 +320,7 @@ router.get("/properties/:type", async (req, res) => {
     res.sendStatus(404);
   }
 });
+////////////////////
 
 router.post("/search", async (req, res) => {
   console.log("hello");
@@ -338,6 +344,7 @@ router.post("/search", async (req, res) => {
     return res.status(400).json({ message: error });
   }
 });
+/////////////////
 
 router.post("/filter", async (req, res) => {
   const filterProp = xss(req.body);
@@ -378,6 +385,7 @@ router.post("/filter", async (req, res) => {
     return res.status(400).json({ message: error });
   }
 });
+//////////////////////////
 
 router.get("/getUserLikedProducts/", async (req, res) => {
   try {
