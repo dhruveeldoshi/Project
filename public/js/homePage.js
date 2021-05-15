@@ -1,6 +1,7 @@
 $(document).ready(function () {
   const productTypes_dropdown = $("#displayProp");
   const filterDiv = $("#filterDiv");
+  const int_prop = [];
 
   //ref:https://stackoverflow.com/questions/5524045/jquery-non-ajax-post
   function submit(action, method, values) {
@@ -30,6 +31,24 @@ $(document).ready(function () {
       throw `parameter cannot be an empty string.`;
   }
 
+  function checkInt(parameter) {
+    const paramter = parseInt(parameter);
+
+    if (isNaN(paramter)) {
+      return false;
+    }
+
+    if (typeof paramter != "number") return false;
+
+    if (paramter < 1) {
+      return false;
+    }
+
+    if (parameter.split(".").length > 1) return false;
+
+    return true;
+  }
+
   $(document).on("click", "#search_submit", function (e) {
     const searchTerm = $("#search_bar").val();
 
@@ -56,11 +75,12 @@ $(document).ready(function () {
         let formData = `<form id ="filterData">`;
         for (prop of data) {
           if (prop.type == "number") {
+            int_prop.push(prop.name);
             formData =
               formData +
               `
             <div>
-            <label for ="${prop.name}"> ${prop.name} (max value)</label>
+            <label for ="${prop.name}"> Maximum value of ${prop.name} </label>
             <input type = "number" id = "${prop.name}"name= "${prop.name}">
             </div>`;
           } else {
@@ -105,6 +125,13 @@ $(document).ready(function () {
       console.log(i);
       if (i.value == "") {
         continue;
+      }
+
+      if (int_prop.includes(i.name)) {
+        if (!checkInt(i.value)) {
+          alert(` ${i.name} should be a positive number`);
+          return;
+        }
       }
 
       updatedData.push(i);
