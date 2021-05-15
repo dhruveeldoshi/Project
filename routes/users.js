@@ -192,7 +192,7 @@ router.get("/signup", async (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-  dataSignIn = xss(req.body);
+  dataSignIn = req.body;
   const firstName = xss(dataSignIn.firstName);
   const lastName = xss(dataSignIn.lastName);
   const email = xss(dataSignIn.emailId);
