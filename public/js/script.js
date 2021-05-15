@@ -206,6 +206,10 @@ $(document).ready(function () {
 
     const review = $("#reviewForm").serializeArray()[0]["value"]; // code to get the review text data
 
+    if (!checkString(review)) {
+      alert("Please enter a valid review");
+      return;
+    }
     $.ajax({
       url: "/product/comment/" + id, // url where to submit the request
       type: "patch", // type of action POST || GET
@@ -213,7 +217,9 @@ $(document).ready(function () {
       success: function (data) {
         window.location.href = "http://localhost:3000/products/product/" + id;
       },
-      error: function () {},
+      error: function () {
+        window.location.href = "http://localhost:3000/" + id;
+      },
     });
   });
 });
