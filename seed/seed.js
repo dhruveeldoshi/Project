@@ -208,7 +208,7 @@ async function main() {
       { property: "color", value: "green" },
       { property: "weight", value: 55 },
     ],
-    67.5
+    67
   );
 
   const product2 = await products.addProduct(
@@ -236,7 +236,7 @@ async function main() {
       { property: "color", value: "yellow" },
       { property: "lifetime (in Years)", value: 20 },
     ],
-    75.5
+    75
   );
 
   const product4 = await products.addProduct(
@@ -251,7 +251,7 @@ async function main() {
       { property: "weight", value: "Medium" },
       { property: "suitable_weather", value: "Spring and fall Season" },
     ],
-    10.8
+    10
   );
 
   const product5 = await products.addProduct(
@@ -295,7 +295,7 @@ async function main() {
       { property: "color", value: "white" },
       { property: "suitable_weather", value: "Spring and the fall" },
     ],
-    35.6
+    35
   );
 
   const product8 = await products.addProduct(
@@ -309,7 +309,7 @@ async function main() {
       { property: "color", value: "purple" },
       { property: "suitable_weather", value: "Spring and the fall" },
     ],
-    25.3
+    25
   );
 
   const product9 = await products.addProduct(
@@ -324,7 +324,7 @@ async function main() {
       { property: "weight of each seed", value: 5 },
       { property: "number of packets ", value: 7 },
     ],
-    10.5
+    10
   );
 
   const product10 = await products.addProduct(
@@ -338,7 +338,7 @@ async function main() {
       { property: "color", value: "pink" },
       { property: "Imported from", value: "china" },
     ],
-    3.9
+    3
   );
 
   const user1 = await users.addUser(
