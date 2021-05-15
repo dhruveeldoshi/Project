@@ -9,8 +9,41 @@ $(document).ready(function () {
     }
     return returnArray;
   }
+  function checkString(parameter, name) {
+    if (parameter === undefined) {
+      return false;
+    }
+    if (typeof parameter != "string") return false;
+    if (parameter.trim().length === 0) return false;
 
-  $("#add_product_sub").click(function () {
+    return true;
+  }
+
+  function checkFacet(facet) {
+    if (facet.length < 2) {
+      throw `Item should have atleast one property.`;
+    }
+  }
+
+  function checkInt(parameter) {
+    const paramter = parseInt(parameter);
+
+    if (isNaN(paramter)) {
+      return false;
+    }
+
+    if (typeof paramter != "number") return false;
+
+    if (paramter < 1) {
+      return false;
+    }
+
+    if (parameter.split(".").length > 1) return false;
+
+    return true;
+  }
+
+  $("#add_product_sub").click(function (e) {
     let i = 1;
     const facetList = [];
     const body = objectifyForm($("#productForm").serializeArray());
@@ -25,8 +58,43 @@ $(document).ready(function () {
     }
 
     body["facet"] = facetList;
+    body["createdBy"] = "Extra feature for the project";
 
-    console.log(body);
+    if (!checkString(body["title"])) {
+      alert("please enter valid title.");
+      return;
+    }
+
+    if (!checkString(body["description"])) {
+      alert("please enter valid description.");
+      return;
+    }
+    if (!checkString(body["productImage"])) {
+      alert("please enter valid productImage.");
+      return;
+    }
+
+    if (!checkString(body["product_type"])) {
+      alert("please enter valid product_type.");
+      return;
+    }
+
+    if (!checkInt(body["stock"])) {
+      alert("stock has to be positive number");
+      return;
+    }
+
+    if (!checkInt(body["price"])) {
+      alert("price has to be positive number");
+      return;
+    }
+
+    try {
+      checkFacet(body["facet"]);
+    } catch (e) {
+      alert(e);
+      return;
+    }
 
     $.ajax({
       url: "/product", // url where to submit the request

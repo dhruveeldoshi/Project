@@ -159,10 +159,8 @@ router.post("/login", async (req, res) => {
 
     if (match) {
       req.session.user = userClient;
-      console.log(req.session.user);
-
       req.session.cartItems = [];
-      return res.redirect("/users/details");
+      return res.redirect("/");
 
       // return res.redirect("/");
     } else {
@@ -244,7 +242,6 @@ router.post("/signup", async (req, res) => {
 
     const allUsers = await usersData.getAllUsers();
     let emailUsed = false;
-    console.log("Fdscz");
     allUsers.find((user) => {
       if (user.emailId === email.toLowerCase()) {
         emailUsed = true;
@@ -264,13 +261,14 @@ router.post("/signup", async (req, res) => {
 
       // req.seesion.user = newUser;
       //Just for now redirecting to the root route
-      // res.redirect("/");
-      req.session.user = newUser;
-      return res.render("pages/loginPage", {
-        authenticated: true,
-        adminAuth: req.session.admin ? true : false,
-        title: "signIn Done",
-      });
+      res.redirect("/");
+      // req.session.user = newUser;
+      // req.session.cartItems = [];
+      // return res.render("pages/loginPage", {
+      //   authenticated: true,
+      //   adminAuth: req.session.admin ? true : false,
+      //   title: "signIn Done",
+      // });
     } else {
       return res.render("pages/signUp", {
         authenticated: false,

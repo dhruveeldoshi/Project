@@ -34,7 +34,10 @@ router.get("/users/:id", async (req, res) => {
   console.log(req.session.admin);
   errors = [];
   if (!req.session.admin) {
-    return res.render("pages/home", { title: "Admin Access Only" });
+    return res.render("pages/home", {
+      title: "Admin Access Only",
+      partial: "getProductTypes",
+    });
   }
   try {
     userInfo = await usersData.getUser(req.params.id);
@@ -53,6 +56,7 @@ router.get("/users/:id", async (req, res) => {
       title: "Admin Access Only",
       adminErrors: errors,
       adminAuth: req.session.admin ? true : false,
+      partial: "getProductTypes",
     });
   }
 });
@@ -74,7 +78,6 @@ router.post("/signup", async (req, res) => {
   if (req.session.admin) {
     res.redirect("/admin");
   } else {
-    adminInfo = xss(req.body);
     firstName = xss(req.body.adminFirstName);
     lastName = xss(req.body.adminLastName);
     adminId = xss(req.body.adminId);
@@ -93,11 +96,9 @@ router.post("/signup", async (req, res) => {
       errors.push("Invalid Passcode");
     if (!(secretPasscode == "CS546")) errors.push("Invalid Passcode");
     if (errors.length > 0) {
-      return res.render("pages/adminSignup", {
-        adminAuth: req.session.admin ? true : false,
-        title: "Signup Error",
-        info: adminInfo,
-        adminErrors: errors,
+      return res.render("pages/adminError", {
+        title: "error page",
+        errors: errors,
       });
     }
   }
@@ -122,46 +123,40 @@ router.post("/signup", async (req, res) => {
         errors.push("Invalid Passcode");
       if (!(secretPasscode == "CS546")) errors.push("Invalid Passcode");
       if (errors.length > 0) {
-        return res.render("pages/adminSignup", {
-          adminAuth: req.session.admin ? true : false,
-          title: "Signup Error",
-          info: adminInfo,
-          adminErrors: errors,
+        return res.render("pages/adminError", {
+          title: "error page",
+          errors: errors,
+        });
+      }
+
+      const allAdmin = await adminData.getAllAdmins();
+      let emailUsed = false;
+      allAdmin.find((element) => {
+        if (element.emailID == adminId.toLowerCase()) {
+          emailUsed = true;
+          errors.push("Email already used");
+          return;
+        }
+      });
+      if (emailUsed == false) {
+        const newAdmin = await adminData.addAdmin(
+          firstName,
+          lastName,
+          adminPassword,
+          adminId.toLowerCase()
+        );
+        req.session.admin = newAdmin;
+        return res.redirect("/");
+      } else {
+        return res.render("pages/adminError", {
+          title: "error page",
+          errors: errors,
         });
       }
     }
-
-    const allAdmin = await adminData.getAllAdmins();
-    let emailUsed = false;
-    allAdmin.find((element) => {
-      if (element.emailID == adminId.toLowerCase()) {
-        emailUsed = true;
-        errors.push("Email already used");
-        return;
-      }
-    });
-    if (emailUsed == false) {
-      const newAdmin = await adminData.addAdmin(
-        firstName,
-        lastName,
-        adminPassword,
-        adminId.toLowerCase()
-      );
-      req.session.admin = newAdmin;
-      return res.redirect("/");
-      // return res.render("pages/home", {
-      //   title: "New admin Created",
-      //   adminAuth: req.session.admin ? true : false,
-      // });
-    } else {
-      return res.render("pages/adminSignup", {
-        title: errors[0],
-        adminErrors: errors,
-        adminAuth: req.session.admin ? true : false,
-      });
-    }
   } catch (error) {
     console.log("admin/signup :", error);
+    res.redirect("/");
   }
 });
 // //////////////////////////////
@@ -171,6 +166,8 @@ router.post("/adminLogin", async (req, res) => {
     if (req.session.admin) {
       return res.redirect("/admin");
     }
+
+    let adminUser;
 
     let adminEmail = xss(req.body.adminEmail.trim());
     let adminPassword = xss(req.body.adminPassword.trim());
@@ -191,10 +188,9 @@ router.post("/adminLogin", async (req, res) => {
       errors.push("Admin's Email Address or Password does not match");
 
     if (errors.length > 0) {
-      return res.render("pages/home", {
-        adminAuth: req.session.admin ? true : false,
-        title: "No admin found",
-        adminErrors: errors,
+      return res.render("pages/adminError", {
+        title: "error page",
+        errors: errors,
       });
     }
 
@@ -207,19 +203,16 @@ router.post("/adminLogin", async (req, res) => {
       return res.redirect("/");
     } else {
       errors.push("Admins's Email or password does not match");
-      return res.render("pages/home", {
-        adminAuth: req.session.admin ? true : false,
-        title: "Admin Login Error",
-        adminErrors: errors,
+      return res.render("pages/adminError", {
+        title: "error page",
+        errors: errors,
       });
     }
   } catch (error) {
     errors.push(error);
-    return res.render("pages/home", {
-      adminAuth: req.session.admin ? true : false,
-
-      title: "Admin Login Error",
-      adminErrors: errors,
+    return res.render("pages/adminError", {
+      title: "error page",
+      errors: errors,
     });
   }
 });
@@ -262,6 +255,7 @@ router.get("/users", async (req, res) => {
       title: "Admin Access Only",
       errors: errors,
       adminAuth: req.session.admin ? true : false,
+      partial: "getProductTypes",
     });
   }
 });
