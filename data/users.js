@@ -1,26 +1,3 @@
-/*
-parameters:-
-  "userId": "123-123-123",
-  "firstName": "John",
-  "lastName": "Doe",
-  "dateOfBirth": "12/22/1990",
-  "age": "30",
-  "phoneNumber": "412-124-1253",
-  "emailId": "johnDoE@gmail.com",
-  "address":{
-  "street":"abcde",
-  "city": "NYC",
-  "state": "NY",
-  "code":"07307"
-  }
-  "profilePhoto": "/static/xyz.jpeg",
-  "password": "Encrypted Password",
-  "reviewsId": ["123-311-1233", "333-333-1111"]
-*/
-// Importing "users" collection from the database and destructuring theObjectId from mongodb
-
-// functions in this file
-
 //addUser() // tested
 //getUser() // tested // Error Handling
 //getAllUsers() // tested // Error Handling

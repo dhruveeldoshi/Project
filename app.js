@@ -45,17 +45,6 @@ app.use(
   })
 );
 
-//MIDDLEWARES
-//admin access middleware
-// app.use("/admin", async (req, res, next) => {
-//   if (req.session.admin) {
-//     next();
-//   } else {
-//     return res.redirect("/");
-//   }
-// });
-
-// Terminate acess if user is not logged in.
 app.use("/users/details", async (req, res, next) => {
   if (req.session.user) {
     // TODO: need to implement error file to reDirect or render
@@ -64,6 +53,7 @@ app.use("/users/details", async (req, res, next) => {
     return res.render("pages/loginPage", { title: "first time" });
   }
 });
+
 app.use((req, res, next) => {
   date = new Date();
   console.log(

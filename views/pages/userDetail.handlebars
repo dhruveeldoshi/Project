@@ -1,9 +1,8 @@
-
 <div class="container" id="user_container">
-<h1 id="user_htag">{{userInfo.firstName}} {{userInfo.lastName}}</h1>
+  <h1 id="user_htag">{{userInfo.firstName}} {{userInfo.lastName}}</h1>
 
   {{#if purchase}}
-    <p class="user_ptag">Purchase History</p>
+    <p class="user_ptag">Products that were bought by user and are in stock</p>
     <ul>
       {{#each purchase}}
         <li

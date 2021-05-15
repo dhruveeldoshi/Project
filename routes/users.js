@@ -54,18 +54,37 @@ router.get("/details", async (req, res) => {
       const userComments = await usersData.getUserComments(
         req.session.user._id
       );
-      console.log("rfeds");
-      // const userLikes = await usersData.getUserLikedProducts(req.params.id);
-      let userViewedProduct = await usersData.getUserViewedProdcuts(
+      const userViewedProduct = await usersData.getUserViewedProdcuts(
         req.session.user._id
       );
-      console.log(userViewedProduct);
-      // userViewedProduct = [...new Set(userViewedProduct)];
 
-      const userBoughtProducts = await usersData.getUserBoughtProducts(
+      let userIDs = {};
+
+      const uniqueViews = [];
+
+      for (i of userViewedProduct) {
+        if (!userIDs[i._id]) {
+          userIDs[i._id] = 1;
+          uniqueViews.push(i);
+        }
+      }
+
+      let userBoughtProducts = await usersData.getUserBoughtProducts(
         req.session.user._id
       );
-      const userLikedProducts = await usersData.getUserLikedProducts(
+
+      userIDs = {};
+
+      const uniqueBought = [];
+
+      for (i of userBoughtProducts) {
+        if (!userIDs[i._id]) {
+          userIDs[i._id] = 1;
+          uniqueBought.push(i);
+        }
+      }
+
+      let userLikedProducts = await usersData.getUserLikedProducts(
         req.session.user._id
       );
 
@@ -75,15 +94,15 @@ router.get("/details", async (req, res) => {
         adminAuth: req.session.admin ? true : false,
         userInfo: userInfo,
         comments: userComments,
-        // likes: userLikes,
-        viewdProduct: userViewedProduct,
-        purchase: userBoughtProducts,
+        viewdProduct: uniqueViews,
+        purchase: uniqueBought,
         liked: userLikedProducts,
       });
     } else {
       return res.redirect("/users/form");
     }
   } catch (error) {
+    console.log(error);
     return res.sendStatus(404);
   }
 });
@@ -167,7 +186,7 @@ router.post("/login", async (req, res) => {
       req.session.cartItems = [];
       return res.redirect("/users/details");
 
-      return res.redirect("/");
+      // return res.redirect("/");
     } else {
       errors.push("User E-mail address or password does not match");
       return res.render("pages/loginPage", {
@@ -221,7 +240,6 @@ router.post("/signup", async (req, res) => {
     errors.push("Invalid LineTwo (routes/users )");
   if (!errorCheck.stringCheck(City))
     errors.push("Invalid City (routes/users )");
-
   if (!errorCheck.stringCheck(State))
     errors.push("Invalid State routes/users )");
   if (!errorCheck.zipcCodeValid(ZipCode))
@@ -289,15 +307,6 @@ router.post("/signup", async (req, res) => {
       authenticated: false,
       errors: errors,
     });
-  }
-});
-
-router.get("/:id", async (req, res) => {
-  try {
-    const userInfo = await usersData.getUser(req.params.id);
-    return res.json(userInfo);
-  } catch (error) {
-    return res.status().json({ message: "No Data (/:id)" });
   }
 });
 

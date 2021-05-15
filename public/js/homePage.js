@@ -30,22 +30,6 @@ $(document).ready(function () {
       throw `parameter cannot be an empty string.`;
   }
 
-  $.ajax({
-    url: "/producttypes",
-    type: "GET",
-    dataType: "json",
-    success: function (data) {
-      productTypes_dropdown.empty();
-      for (i of data) {
-        const temp = `<button type="button" class="dropdown-item" value="${i}">${i}</button>`;
-        productTypes_dropdown.append(temp);
-      }
-    },
-    error: function () {
-      console.log("fdcsxz");
-    },
-  });
-
   $(document).on("click", "#search_submit", function (e) {
     const searchTerm = $("#search_bar").val();
 

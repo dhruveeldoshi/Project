@@ -1,35 +1,6 @@
 $(document).ready(function () {
   let count = 0;
 
-  function hasUserLikedThisProductBefore(productid) {
-    let output = false;
-    $.ajax({
-      url: "/getUserLikedProducts/", // url where to submit the request
-      type: "GET", // type of action POST || GET
-      async: false,
-      dataType: "json", // data type
-      success: function (data) {
-        for (i of data) {
-          if (i._id === productid) {
-            output = true;
-            break;
-          }
-        }
-      },
-      error: function () {},
-    });
-    return output;
-  }
-
-  const userLiked = hasUserLikedThisProductBefore(
-    $(".product_like").attr("data-id")
-  );
-
-  if (userLiked) {
-    $("#unliked").attr("id", "liked");
-    console.log("fedsx");
-  }
-
   function objectifyForm(formArray) {
     //serialize data function
     var returnArray = {};
@@ -97,7 +68,7 @@ $(document).ready(function () {
   });
 
   $(".delete_product").on("click", function (e) {
-    var id = $(this).attr("data-id");
+    const id = $(this).attr("data-id");
     $.ajax({
       url: "/product/" + id, // url where to submit the request
       type: "delete", // type of action POST || GET
@@ -112,7 +83,7 @@ $(document).ready(function () {
   });
 
   $(".product_click").on("click", function (e) {
-    var id = $(this).attr("data-id");
+    const id = $(this).attr("data-id");
     $.ajax({
       url: "/products/product/" + id, // url where to submit the request
       type: "GET", // type of action POST || GET
@@ -124,7 +95,7 @@ $(document).ready(function () {
   });
 
   $(".buy_now").on("click", function (e) {
-    var id = $(this).attr("data-id");
+    const id = $(this).attr("data-id");
     alert("Product has beed added to Cart");
     $.ajax({
       url: "/addtocart/" + id, // url where to submit the request
@@ -159,12 +130,11 @@ $(document).ready(function () {
       },
       error: function () {},
     });
-   
   });
 
   $(".add_review").on("click", function (e) {
     e.preventDefault();
-    var id = $(this).attr("data-id");
+    const id = $(this).attr("data-id");
 
     const review = $("#reviewForm").serializeArray()[0]["value"]; // code to get the review text data
 
@@ -174,46 +144,6 @@ $(document).ready(function () {
       data: { review: review },
       success: function (data) {
         window.location.href = "http://localhost:3000/products/product/" + id;
-      },
-      error: function () {},
-    });
-  });
-
-  $(".product_like").on("click", function (e) {
-    e.preventDefault();
-    var id = $(this).attr("data-id");
-
-    if (userLiked) {
-      $.ajax({
-        url: "/product/dislike/" + id, // url where to submit the request
-        type: "patch", // type of action POST || GET
-        success: function (data) {
-          window.location.href = "http://localhost:3000/products/product/" + id;
-          $("#unliked").attr("id", "liked");
-          userLiked = false;
-        },
-        error: function () {},
-      });
-    } else {
-      $.ajax({
-        url: "/product/like/" + id, // url where to submit the request
-        type: "patch", // type of action POST || GET
-        success: function (data) {
-          window.location.href = "http://localhost:3000/products/product/" + id;
-          $("#liked").attr("id", "unliked");
-          userLiked = true;
-        },
-        error: function () {},
-      });
-    }
-  });
-
-  $("#cart_btn").on("click", function (e) {
-    $.ajax({
-      url: "/cart/", // url where to submit the request
-      type: "get", // type of action POST || GET
-      success: function (data) {
-        window.location.href = "http://localhost:3000/cart/";
       },
       error: function () {},
     });

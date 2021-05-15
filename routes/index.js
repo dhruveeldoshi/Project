@@ -14,7 +14,7 @@ const constructorMethod = (app) => {
   app.use("/admin", adminRoutes);
   app.use("/comments", commentsRoutes);
   app.use("*", (req, res) => {
-    res.status(404).json({ title: "404: Error" });
+    res.redirect("/");
   });
 };
 

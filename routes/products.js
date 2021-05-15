@@ -10,7 +10,7 @@ const errorHandler = require("../Error/DatabaseErrorHandling");
 const { get, route } = require("./users");
 
 router.post("/product", async (req, res) => {
-  const productInfo = xss(req.body);
+  const productInfo = req.body;
   console.log(productInfo);
   console.log("Fd");
   productInfo["price"] = parseFloat(productInfo.price);
@@ -89,6 +89,7 @@ router.get("/", async (req, res) => {
       title: "All Product List",
       productList: productList,
       hasProduct: hasProduct,
+      partial: "getProductTypes",
     });
   } catch (e) {
     return res.sendStatus(400);
@@ -98,7 +99,6 @@ router.get("/", async (req, res) => {
 //to get product by Id provided
 router.get("/products/product/:id", async (req, res) => {
   try {
-    // if (req.session.user) {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     let product = await productsData.getProductById(req.params.id);
     const productComments = await productsData.getProductComments(
@@ -110,10 +110,9 @@ router.get("/products/product/:id", async (req, res) => {
       commentList.push(comment.commentText);
     }
 
-    await usersData.userViewsAProduct(
-      "609a2fca59ef0ecfeb7b57af",
-      req.params.id
-    );
+    if (req.session.user) {
+      await usersData.userViewsAProduct(req.session.user._id, req.params.id);
+    }
 
     let hascomments = true;
 
@@ -128,15 +127,14 @@ router.get("/products/product/:id", async (req, res) => {
       product: product,
       comments: commentList,
       hascomments: hascomments,
+      partial: "getUserLikes",
     });
-
-    // } else {
-    //   res.sendStatus(404).json({ message: "User not Authenticated" });
-    // }
   } catch (e) {
-    return res.status(404).json({ error: "product not found" });
+    console.log(e);
+    return res.redirect("/");
   }
 });
+
 ////////////////////////////////////////////////////////////////
 router.patch("/product/like/:id", async (req, res) => {
   try {
@@ -166,68 +164,7 @@ router.patch("/product/dislike/:id", async (req, res) => {
     return res.sendStatus(404);
   }
 });
-// router.patch("/product/dislike/:id", async (req, res) => {
-//   try {
-//     errorHandler.checkStringObjectId(req.params.id, "Product ID");
-//     if (req.session.user) {
-//       await productsData.addDisLike(req.params.id, req.session.user._id);
-//       return res.sendStatus(200);
-//     } else {
-//       return res.sendStatus(404);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(404);
-//   }
-// });
-///////////////////////////////
-router.patch("/product/comment/:id", async (req, res) => {
-  const comment_text = req.body.review;
-  try {
-    errorHandler.checkStringObjectId(req.params.id, "Product ID");
-    errorHandler.checkString(req.body.review);
-    if (req.session.user) {
-      await commentsData.addComment(
-        req.session.user._id,
-        req.params.id,
-        comment_text
-      );
-      return res.render("pages/singleProduct", {
-        title: "Product",
-        adminAuth: req.session.admin,
-        authenticated: req.session.user,
-      });
-    } else {
-      return res.sendStatus(404);
-    }
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(404);
-  }
-});
-//////////////////
-// router.patch("/product/comment/:id", async (req, res) => {
-//   const comment_text = xss(req.body.review);
-//   try {
-//     errorHandler.checkStringObjectId(req.params.id, "Product ID");
-//     errorHandler.checkString(comment_text);
-//     if (req.session.user) {
-//       await commentsData.addComment(
-//         req.session.user._id,
-//         req.params.id,
-//         comment_text
-//       );
-//       return res.sendStatus(200);
-//     } else {
-//       return res.sendStatus(404);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(404);
-//   }
-// });
 
-/////////////////
 router.get("/buy", async (req, res) => {
   try {
     if (req.session.user) {
@@ -304,13 +241,21 @@ router.get("/cart/", async (req, res) => {
         hasProduct = true;
       }
 
+      let totalPrice = 0;
+
+      for (i of productsList) {
+        totalPrice = totalPrice + i.price;
+      }
+
       return res.render("pages/cart", {
         productsList: productsList,
         hasProduct: hasProduct,
         user: req.session.user,
+        total: totalPrice,
+        authenticated: true,
       });
     } else {
-      res.sendStatus(404);
+      res.redirect("/");
     }
   } catch (error) {
     console.log(error);
@@ -359,14 +304,10 @@ router.get("/properties/:type", async (req, res) => {
 ////////////////////
 
 router.post("/search", async (req, res) => {
-  console.log("hello");
   const searchTerm = xss(req.body.searchTerm);
   try {
     errorHandler.checkString(searchTerm);
     const productList = await productsData.searchProduct(searchTerm);
-
-    console.log(productList);
-
     let hasProduct = false;
 
     if (productList.length > 0) {
@@ -378,6 +319,7 @@ router.post("/search", async (req, res) => {
       title: "All Product List",
       productList: productList,
       hasProduct: hasProduct,
+      partial: "getProductTypes",
     });
   } catch (error) {
     console.log(error);
@@ -387,7 +329,7 @@ router.post("/search", async (req, res) => {
 /////////////////
 
 router.post("/filter", async (req, res) => {
-  const filterProp = xss(req.body);
+  const filterProp = req.body;
   try {
     const productTypesList = await productType.getProductTypes();
     for (type of productTypesList) {
@@ -421,6 +363,7 @@ router.post("/filter", async (req, res) => {
       title: "All Product List",
       productList: productList,
       hasProduct: hasProduct,
+      partial: "getProductTypes",
     });
   } catch (error) {
     console.log(error);
