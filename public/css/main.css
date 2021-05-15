@@ -144,7 +144,7 @@
 .div_dropdown {
   padding: 1%;
   background-color: #deeae0;
-  padding-left: 28%;
+  padding-left: 15%;
 }
 .dropdown-menu.show {
   position: absolute;
@@ -157,6 +157,7 @@
   background-color: #28a745;
   /* margin-bottom: 28%; */
 }
+
 /* .container {
   /* background-color: #dffbaa94; */
 /* height: 350px; */
@@ -187,6 +188,7 @@ ul {
 }
 .single_h3 {
   font-weight: bold;
+  color: #000;
 }
 #review_post {
   margin-right: 100px;
@@ -242,3 +244,27 @@ ul {
   font-weight: 500;
   color: red;
 }
+
+.bg-success {
+  background-color: #fff!important;
+  border-style:groove;
+  padding: 2%;
+
+}
+
+#productList{
+  padding-left: 40px;
+    padding-right: 40px;
+}
+#cart_btn{
+  margin-left: 5%;
+}
+#cart_pg_row{
+    border: groove;
+    padding: 2%;
+    margin-bottom: 5%;
+}
+.cart_fields{
+  color:#000;
+}
+

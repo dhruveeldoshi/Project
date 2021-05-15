@@ -67,6 +67,7 @@ router.delete("/product/:id", async (req, res) => {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     const product = await productsData.getProductById(req.params.id);
     await productsData.deleteProduct(req.params.id, product.stock);
+
     return res.json(product);
   } catch (error) {
     console.log(error);
@@ -140,20 +141,6 @@ router.patch("/product/like/:id", async (req, res) => {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     if (req.session.user) {
       await productsData.addLike(req.params.id, req.session.user._id);
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(404);
-    }
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(404);
-  }
-});
-router.patch("/product/dislike/:id", async (req, res) => {
-  try {
-    errorHandler.checkStringObjectId(req.params.id, "Product ID");
-    if (req.session.user) {
-      await productsData.addDisLike(req.params.id, req.session.user._id);
       res.sendStatus(200);
     } else {
       res.sendStatus(404);
@@ -267,7 +254,11 @@ router.get("/cart/", async (req, res) => {
       for (i of unique) {
         productsList.push(await productsData.getProductById(i));
       }
-      res.json(productsList);
+      // res.json(productsList);
+      return res.render("pages/cart", {
+        productsList: productsList,
+      });
+
     } else {
       res.sendStatus(404);
     }
