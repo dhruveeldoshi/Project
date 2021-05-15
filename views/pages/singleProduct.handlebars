@@ -1,11 +1,10 @@
 <div class="container single_prod_container">
 
-  <!--Section: Content-->
+ 
   <section class="px-md-5 mx-md-5 text-center text-lg-left dark-grey-text">
 
     <!--Grid row-->
     <div class="row">
-
       <!--Grid column-->
       <div class="col-md-6 mb-4 mb-md-0">
 
@@ -42,7 +41,7 @@
 
         <div>
 
-          <div id="productPropHeading">Product Properties</div>
+          <div class="productPropHeading">Product Properties</div>
 
           {{#each product.facet}}
             <p>
@@ -55,9 +54,9 @@
 
         </div>
 
-        <div>
+        <div class="prod_comment">
 
-          <div id="productPropHeading">User reviews on the product</div>
+          <div class="productPropHeading">User reviews on the product</div>
 
           {{#if hascomments}}
 
@@ -84,21 +83,21 @@
 
         {{/if}}
 
-        </div>
+      </div>
       <div class="col-md-6 mb-4 mb-md-0">
         <div class="view overlay z-depth-1-half">
           <img
             src="{{product.productImage}}"
             class=""
             alt="single product"
-            height="250px"
+            height="250"
           />
           <a href="#">
             <div class="mask rgba-white-light"></div>
           </a>
         </div>
       </div>
-
+    </div>
   </section>
 
 </div>
