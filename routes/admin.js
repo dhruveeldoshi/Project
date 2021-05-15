@@ -128,10 +128,11 @@ router.post("/signup", async (req, res) => {
         adminId.toLowerCase()
       );
       req.session.admin = newAdmin;
-      return res.render("pages/home", {
-        title: "New admin Created",
-        adminAuth: req.session.admin ? true : false,
-      });
+      return res.redirect("/");
+      // return res.render("pages/home", {
+      //   title: "New admin Created",
+      //   adminAuth: req.session.admin ? true : false,
+      // });
     } else {
       return res.render("pages/adminSignup", {
         title: errors[0],
