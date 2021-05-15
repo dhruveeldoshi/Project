@@ -163,12 +163,10 @@ router.post("/login", async (req, res) => {
     if (match) {
       req.session.user = userClient;
       console.log(req.session.user);
-      let comp = req.session.previousRoute;
-      if (comp) {
-        req.session.previousRoute = "";
-        req.session.cartItems = [];
-        return res.redirect("/users/details");
-      }
+
+      req.session.cartItems = [];
+      return res.redirect("/users/details");
+
       return res.redirect("/");
     } else {
       errors.push("User E-mail address or password does not match");
