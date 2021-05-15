@@ -71,7 +71,6 @@ router.get("/signup", async (req, res) => {
 ////////////////////////////////
 
 router.post("/signup", async (req, res) => {
-<<<<<<< HEAD
   if (req.session.admin) {
     res.redirect("/admin");
   } else {
@@ -102,8 +101,6 @@ router.post("/signup", async (req, res) => {
       });
     }
   }
-=======
->>>>>>> 0339d1fe5b452b33e33fc3d7accfa0b25f990d12
   try {
     if (req.session.admin) {
       return res.redirect("/admin");
