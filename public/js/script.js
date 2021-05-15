@@ -71,19 +71,24 @@ $(document).ready(function () {
       type: "POST", // type of action POST || GET
       dataType: "json", // data type
       data: body, // post data || get data
-      success: function (data) {
-        $("#error_msg").empty();
-        $("#exampleModalLong").hide();
-        $("#prod_modal_dialog").hide();
-        location.reload();
-        console.log("rfed");
-      },
-      error: function () {
-        $("#error_msg").empty();
-        $("#error_msg").append(
-          "<p>Error! Please enter a valid data to add the product.</p>"
-        );
-        console.log("rfd");
+
+      complete: function (e) {
+        if (e.status == 200) {
+          $("#error_msg").empty();
+          $("#exampleModalLong").hide();
+          $("#prod_modal_dialog").hide();
+          location.reload();
+        } else if (e.status == 400) {
+          $("#error_msg").empty();
+          $("#error_msg").append(
+            `<p>Error! ${JSON.parse(e.responseText)["error"]}</p>`
+          );
+        } else {
+          $("#error_msg").empty();
+          $("#error_msg").append(
+            "<p>Error! Please enter a valid data to add the product.</p>"
+          );
+        }
       },
     });
   });
@@ -142,6 +147,7 @@ $(document).ready(function () {
     });
   });
 
+
   $("#cart_btn").on("click", function (e) {
     $.ajax({
       url: "/cart/", // url where to submit the request
@@ -178,6 +184,7 @@ $(document).ready(function () {
       type: "patch", // type of action POST || GET
       data: { review: review },
       success: function (data) {
+
         window.location.href = "http://localhost:3000/products/product/" + id;
       },
       error: function () {},
@@ -214,5 +221,19 @@ $(document).ready(function () {
     }
   });
 
-  
+  $("#cart_btn").on("click", function (e) {
+    var id = "609a9ffbe959bc914a4a5655";
+    alert("eyreuty");
+    $.ajax({
+      url: "/addtocart/" + id, // url where to submit the request
+      type: "patch", // type of action POST || GET
+      success: function (data) {
+        alert("noxvcxvw");
+        window.location.href = "http://localhost:3000/addtocart/" + id;
+        // >>>>>>> master
+      },
+      error: function () {},
+    });
+  });
+
 });
