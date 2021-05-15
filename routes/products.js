@@ -264,6 +264,7 @@ router.get("/cart/", async (req, res) => {
       return res.render("pages/cart", {
         productsList: productsList,
         hasProduct: hasProduct,
+        user: req.session.user
       });
     } else {
       res.sendStatus(404);
