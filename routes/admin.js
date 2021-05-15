@@ -28,7 +28,6 @@ router.get("/", async (req, res) => {
     return res.sendStatus(400);
   }
 });
-////////////////////////////////
 router.get("/users/:id", async (req, res) => {
   console.log(req.session.admin);
   errors = [];
@@ -84,7 +83,9 @@ router.post("/signup", async (req, res) => {
     if (!errorCheck.stringCheck(lastName)) errors.push("Invalid Last Name");
     if (!errorCheck.emailValidate(adminId)) errors.push("Invalid Admin Id");
     if (!errorCheck.validPassword(adminPassword))
-      errors.push("Invalid Admin Password");
+      errors.push(
+        "Invalid Admin Password. there should be atleast 8 characters"
+      );
 
     if (!errorCheck.stringCheck(secretPasscode))
       errors.push("Invalid Passcode");
@@ -100,23 +101,14 @@ router.post("/signup", async (req, res) => {
   }
   try {
     const allAdmin = await adminData.getAllAdmins();
-    let emailUsed;
-    if (!allAdmin) {
-      emailUsed = false;
-      return emailUsed;
-    } else {
-      allAdmin.find((element) => {
-        if (element.emailID == adminId.toLowerCase()) {
-          emailUsed = true;
-
-          errors.push("Email already used");
-          return emailUsed;
-        } else {
-          emailUsed = false;
-          return emailUsed;
-        }
-      });
-    }
+    let emailUsed = false;
+    allAdmin.find((element) => {
+      if (element.emailID == adminId.toLowerCase()) {
+        emailUsed = true;
+        errors.push("Email already used");
+        return;
+      }
+    });
     if (emailUsed == false) {
       const newAdmin = await adminData.addAdmin(
         firstName,

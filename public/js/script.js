@@ -9,24 +9,15 @@ $(document).ready(function () {
       async: false,
       dataType: "json", // data type
       success: function (data) {
-        console.log(data);
         for (i of data) {
-          console.log(i._id);
-          console.log(productid);
-
-          console.log("frds");
           if (i._id === productid) {
             output = true;
-            console.log(output, "hbnjm");
             break;
           }
         }
       },
       error: function () {},
     });
-
-    console.log(output, "frd");
-
     return output;
   }
 

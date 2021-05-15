@@ -20,13 +20,22 @@ $(document).ready(function () {
     form.appendTo("body").submit();
   }
 
+  function checkString(parameter, name) {
+    if (parameter === undefined) {
+      throw `Please pass ${name} parameter to the function`;
+    }
+    if (typeof parameter != "string")
+      throw `parameter ${name} must be of type string.`;
+    if (parameter.trim().length === 0)
+      throw `parameter cannot be an empty string.`;
+  }
+
   $.ajax({
     url: "/producttypes",
     type: "GET",
     dataType: "json",
     success: function (data) {
       productTypes_dropdown.empty();
-      console.log(data);
       for (i of data) {
         const temp = `<button type="button" class="dropdown-item" value="${i}">${i}</button>`;
         productTypes_dropdown.append(temp);
@@ -37,10 +46,19 @@ $(document).ready(function () {
     },
   });
 
-  // $(document).on("click", "#search_submit", function (e) {
-  //   const searchTerm = $("#search_bar").val();
-  //   submit(`/search/${searchTerm}`, "GET", []);
-  // });
+  $(document).on("click", "#search_submit", function (e) {
+    const searchTerm = $("#search_bar").val();
+
+    try {
+      checkString(searchTerm);
+    } catch {
+      e.preventDefault();
+      $("#error_search").remove();
+      $("#div_search_bar").append(
+        `<p id="error_search"> Please provide a valid search term to search products.</p>`
+      );
+    }
+  });
 
   $(document).on("click", ".dropdown-item", function (e) {
     const product_type = $(this).val();

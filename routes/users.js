@@ -190,7 +190,7 @@ router.get("/signup", async (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-  dataSignIn = xss(req.body);
+  dataSignIn = req.body;
   const firstName = xss(dataSignIn.firstName);
   const lastName = xss(dataSignIn.lastName);
   const email = xss(dataSignIn.emailId);
@@ -215,7 +215,6 @@ router.post("/signup", async (req, res) => {
     errors.push("Invalid PhoneNumber (routes/users)");
   if (!errorCheck.stringCheck(Line1))
     errors.push("Invalid LineOne (routes/users )");
-
   if (!errorCheck.stringCheck(Line2))
     errors.push("Invalid LineTwo (routes/users )");
   if (!errorCheck.stringCheck(City))
@@ -246,15 +245,12 @@ router.post("/signup", async (req, res) => {
     }
 
     const allUsers = await usersData.getAllUsers();
-    let emailUsed;
+    let emailUsed = false;
+    console.log("Fdscz");
     allUsers.find((user) => {
       if (user.emailId === email.toLowerCase()) {
         emailUsed = true;
-
-        return emailUsed;
-      } else {
-        emailUsed = false;
-        return emailUsed;
+        return;
       }
     });
 
