@@ -9,7 +9,6 @@ const errorCheck = require("../errorCheck");
 const xss = require("xss");
 
 dataError = require("../Error/DatabaseErrorHandling");
-//////////////////////////////
 
 router.get("/", async (req, res) => {
   if (!req.session.admin) {

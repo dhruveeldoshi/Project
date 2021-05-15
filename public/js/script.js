@@ -117,7 +117,6 @@ $(document).ready(function () {
         location.reload();
       },
       error: function () {},
-
     });
   });
 
@@ -147,7 +146,6 @@ $(document).ready(function () {
     });
   });
 
-
   $("#cart_btn").on("click", function (e) {
     $.ajax({
       url: "/cart/", // url where to submit the request
@@ -162,9 +160,7 @@ $(document).ready(function () {
   $("#confirmation").on("click", function (e) {
     alert("Purchase done sucessfully");
     window.location.href = "http://localhost:3000/";
-   
   });
-
 
   $(".add_review").on("click", function (e) {
     e.preventDefault();
@@ -177,13 +173,11 @@ $(document).ready(function () {
       type: "patch", // type of action POST || GET
       data: { review: review },
       success: function (data) {
-
         window.location.href = "http://localhost:3000/products/product/" + id;
       },
       error: function () {},
     });
   });
-
 
   $(".product_like").on("click", function (e) {
     e.preventDefault();
@@ -215,18 +209,13 @@ $(document).ready(function () {
   });
 
   $("#cart_btn").on("click", function (e) {
-    var id = "609a9ffbe959bc914a4a5655";
-    alert("eyreuty");
     $.ajax({
-      url: "/addtocart/" + id, // url where to submit the request
-      type: "patch", // type of action POST || GET
+      url: "/cart/", // url where to submit the request
+      type: "get", // type of action POST || GET
       success: function (data) {
-        alert("noxvcxvw");
-        window.location.href = "http://localhost:3000/addtocart/" + id;
-        // >>>>>>> master
+        window.location.href = "http://localhost:3000/cart/";
       },
       error: function () {},
     });
   });
-
 });
