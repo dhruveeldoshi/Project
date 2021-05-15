@@ -21,11 +21,11 @@ router.post("/product", async (req, res) => {
   console.log(productInfo);
   try {
     if (isNaN(productInfo["price"])) {
-      throw "price is nan";
+      throw "price is invalid.";
     }
 
     if (isNaN(productInfo["stock"])) {
-      throw "Stock is nan";
+      throw "Stock is invalid";
     }
     errorHandler.checkObject(productInfo, "Product form data");
     errorHandler.checkString(productInfo.title, "title");
@@ -57,7 +57,7 @@ router.post("/product", async (req, res) => {
       res.json({ error });
     } else {
       res.status(500);
-      res.json({ "Product was not added": "" });
+      res.json({ error });
     }
   }
 });

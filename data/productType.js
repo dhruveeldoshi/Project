@@ -31,7 +31,6 @@ module.exports = exportedMethods = {
   async addNewProductType(type, properties, countOfProducts) {
     errorHandler.checkString(type, "Product Type");
     errorHandler.checkInt(countOfProducts, "Count of products");
-    console.log(properties);
     errorHandler.checkPropertiesOfProduct(properties);
 
     console.log("fe");

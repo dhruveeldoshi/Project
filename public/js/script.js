@@ -48,7 +48,7 @@ $(document).ready(function () {
         } else {
           $("#error_msg").empty();
           $("#error_msg").append(
-            "<p>Error! Please enter a valid data to add the product.</p>"
+            `<p>Error! ${JSON.parse(e.responseText)["error"]}</p>`
           );
         }
       },

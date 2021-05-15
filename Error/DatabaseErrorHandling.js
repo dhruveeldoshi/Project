@@ -15,7 +15,8 @@ module.exports = {
   checkEmail(parameter) {
     this.checkString(parameter, "email");
 
-    const emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRe =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (!emailRe.test(String(parameter).toLowerCase())) {
       throw `Email is not in proper format.`;
@@ -80,7 +81,7 @@ module.exports = {
       throw `Facet value should be of type Array`;
     }
     if (facet.length < 2) {
-      throw `Item should have atleast two properties.`;
+      throw `Item should have atleast one property.`;
     }
 
     for (element of facet) {
@@ -156,7 +157,7 @@ module.exports = {
       throw `Properties passing into addNewProductType method should be of array type.`;
     }
 
-    if (properties.length < 2) {
+    if (properties.length < 1) {
       throw `You should pass atleast two properties into addNewProductType method.`;
     }
 

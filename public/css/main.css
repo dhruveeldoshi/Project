@@ -129,10 +129,10 @@
 #user_signup {
   margin-left: 1%;
 }
-#user_login{
+#user_login {
   margin-right: 3%;
 }
-#user_logout{
+#user_logout {
   margin-left: 65%;
 }
 #div_search_bar {
@@ -235,7 +235,6 @@ ul {
 .home_link:hover {
   background-color: #edfcce;
   color: #fff;
-
 }
 
 #liked {
@@ -252,32 +251,31 @@ ul {
 }
 
 .bg-success {
-  background-color: #fff!important;
-  border-style:groove;
+  background-color: #fff !important;
+  border-style: groove;
   padding: 2%;
-
 }
 
-#productList{
+#productList {
   padding-left: 40px;
-    padding-right: 40px;
+  padding-right: 40px;
 }
-#cart_btn{
+#cart_btn {
   margin-left: 5%;
 }
-#cart_pg_row{
-    border: groove;
-    padding: 2%;
-    margin-bottom: 5%;
+#cart_pg_row {
+  border: groove;
+  padding: 2%;
+  margin-bottom: 5%;
 }
-.cart_fields{
-  color:#000;
+.cart_fields {
+  color: #000;
 }
-.cart_h3{
-  color:#28a745;
+.cart_h3 {
+  color: #28a745;
 }
 
-#admin_modal{
+#admin_modal {
   margin-right: 4%;
 }
 
@@ -287,10 +285,10 @@ ul {
   padding-top: 2%;
   margin-top: 2%;
 }
-#user_htag{
+#user_htag {
   text-align: center;
 }
 
-.user_ptag{
+.user_ptag {
   font-size: 20px;
 }

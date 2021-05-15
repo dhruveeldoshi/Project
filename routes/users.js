@@ -116,28 +116,6 @@ router.get("/user/:id", async (req, res) => {
   }
 });
 
-// router.get("/form", async (req, res) => {
-//   console.log("out of /form");
-//   if (req.session.user) {
-//     console.log("into 1st /form");
-
-//     return res.redirect("/users/details");
-//   } else {
-//     console.log("into 2nd /form");
-
-//     return res.render("pages/loginPage", {
-//       title: "First",
-//     });
-//   }
-// });
-
-// router.get("/login", async (req, res) => {
-//   if (req.session.user) {
-//     return res.redirect("/users/details"); //temporarily    redirect to products route
-//   } else {
-//     return res.render("pages/loginPage", { title: "Login Page" });
-//   }
-
 router.post("/login", async (req, res) => {
   console.log("login");
   if (req.session.user) {
@@ -156,7 +134,7 @@ router.post("/login", async (req, res) => {
     if (errorCheck.emailValidate(email) == false)
       errors.push("Invalid user E-mail address.");
     if (errorCheck.validPassword(password) == false)
-      errors.push("Invalid password.");
+      errors.push("Password also should have 8 characters.");
     email = email.toLowerCase();
 
     const users = await usersData.getAllUsers();
@@ -231,7 +209,7 @@ router.post("/signup", async (req, res) => {
   if (!errorCheck.emailValidate(email))
     errors.push("Invalid Email (routes/users)");
   if (!errorCheck.validPassword(password))
-    errors.push("Invalid Password (routes/users)");
+    errors.push("Password should have atleast 8 characters (routes/users)");
   if (!errorCheck.phoneNumberValid(phoneNumber))
     errors.push("Invalid PhoneNumber (routes/users)");
   if (!errorCheck.stringCheck(Line1))
