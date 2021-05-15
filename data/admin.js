@@ -61,6 +61,7 @@ module.exports = {
     if (!adminInfo) {
       throw "Could not find an admin with the given ID";
     }
+    adminInfo._id = adminInfo._id.toString();
     return adminInfo;
   },
 

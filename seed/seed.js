@@ -423,12 +423,23 @@ async function main() {
     product_type: "plant",
   };
 
-  await admin.addAdmin(
+  const admin1 = await admin.addAdmin(
     "Hanish",
     "Rohit",
     "hanishPassword",
     "hanish@stevens.edu"
   );
+
+  await admin.adminAddsAProduct(product1, admin1);
+  await admin.adminAddsAProduct(product2, admin1);
+  await admin.adminAddsAProduct(product3, admin1);
+  await admin.adminAddsAProduct(product4, admin1);
+  await admin.adminAddsAProduct(product5, admin1);
+  await admin.adminAddsAProduct(product6, admin1);
+  await admin.adminAddsAProduct(product7, admin1);
+  await admin.adminAddsAProduct(product8, admin1);
+  await admin.adminAddsAProduct(product9, admin1);
+  await admin.adminAddsAProduct(product10, admin1);
 
   //   await products.deleteProduct(product1, 34);
   //   await products.deleteProduct(product6, 24);

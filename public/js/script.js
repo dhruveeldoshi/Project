@@ -58,7 +58,7 @@ $(document).ready(function () {
     }
 
     body["facet"] = facetList;
-    body["createdBy"] = "Extra feature for the project";
+    body["createdBy"] = "Extra feature of the project";
 
     if (!checkString(body["title"])) {
       alert("please enter valid title.");

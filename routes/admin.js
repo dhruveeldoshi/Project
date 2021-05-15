@@ -15,18 +15,39 @@ router.get("/", async (req, res) => {
     return res.redirect("/");
   }
   try {
-    let productList = await productsData.getAllProducts();
+    let productList = await adminData.getAdmin(req.session.admin._id);
+    productList = productList.addedProducts;
+
+    const products = [];
+    for (i of productList) {
+      i = i.toString();
+
+      try {
+        products.push(await productsData.getProductById(i));
+      } catch (e) {
+        if (e == 4000) {
+          continue;
+        } else {
+          throw "fatel error";
+        }
+      }
+    }
+
+    console.log(products);
+
+    let hasProduct = false;
+
     if (productList.length > 0) {
       hasProduct = true;
     }
     return res.render("pages/admin", {
       adminAuth: req.session.admin ? true : false,
-
       title: "All Product List",
-      productList: productList,
+      productList: products,
       hasProduct: hasProduct,
     });
   } catch (e) {
+    console.log(e);
     return res.sendStatus(400);
   }
 });

@@ -126,6 +126,7 @@ $(document).ready(function () {
       if (i.value == "") {
         continue;
       }
+      i.value = i.value.toLowerCase();
 
       if (int_prop.includes(i.name)) {
         if (!checkInt(i.value)) {

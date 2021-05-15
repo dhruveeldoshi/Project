@@ -3,6 +3,7 @@ const router = express.Router();
 const data = require("../data");
 const productsData = data.products;
 const commentsData = data.comments;
+const adminData = data.admin;
 const productType = data.productType;
 const xss = require("xss");
 
@@ -48,6 +49,10 @@ router.post("/product", async (req, res) => {
       facet,
       price
     );
+
+    if (req.session.admin) {
+      await adminData.adminAddsAProduct(newProduct, req.session.admin._id);
+    }
     res.json(newProduct);
   } catch (error) {
     console.log(error);
@@ -67,6 +72,10 @@ router.delete("/product/:id", async (req, res) => {
     errorHandler.checkStringObjectId(req.params.id, "Product ID");
     const product = await productsData.getProductById(req.params.id);
     await productsData.deleteProduct(req.params.id, product.stock);
+
+    if (req.session.admin) {
+      await adminData.adminDeletesAProduct(product._id, req.session.admin._id);
+    }
     return res.json(product);
   } catch (error) {
     console.log(error);
