@@ -33,8 +33,6 @@ router.get("/", async (req, res) => {
       }
     }
 
-    console.log(products);
-
     let hasProduct = false;
 
     if (productList.length > 0) {
@@ -85,7 +83,7 @@ router.get("/users/:id", async (req, res) => {
 /////////////////////////////////
 router.get("/signup", async (req, res) => {
   if (req.session.admin) {
-    return res.redirect("/admin");
+    return res.redirect("/");
   } else {
     return res.render("pages/adminSignup", {
       title: "New adminSignup",
@@ -166,7 +164,7 @@ router.post("/signup", async (req, res) => {
           adminPassword,
           adminId.toLowerCase()
         );
-        req.session.admin = newAdmin;
+        //req.session.admin = newAdmin;
         return res.redirect("/");
       } else {
         return res.render("pages/adminError", {
