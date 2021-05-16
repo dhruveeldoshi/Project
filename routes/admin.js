@@ -100,7 +100,7 @@ router.post("/signup", async (req, res) => {
     firstName = xss(req.body.adminFirstName);
     lastName = xss(req.body.adminLastName);
     adminId = xss(req.body.adminId);
-    adminPassword = xss(req.body.adminPassword);
+    adminPassword = xss(req.body.adminSignUpPassword);
     secretPasscode = xss(req.body.secretPasscode);
     errors = [];
     if (!errorCheck.stringCheck(firstName)) errors.push("Invalid First Name");
