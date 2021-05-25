@@ -1,132 +1,253 @@
-/*
-parameters:-
-  "userId": "123-123-123",
-  "firstName": "John",
-  "lastName": "Doe",
-  "dateOfBirth": "12/22/1990",
-  "age": "30",
-  "phoneNumber": "412-124-1253",
-  "emailId": "johnDoE@gmail.com",
-  "address":{
-  "street":"abcde",
-  "city": "NYC",
-  "state": "NY",
-  "code":"07307"
-  }
-  "profilePhoto": "/static/xyz.jpeg",
-  "password": "Encrypted Password",
-  "reviewsId": ["123-311-1233", "333-333-1111"]
-*/
-// Importing "users" collection from the database and destructuring theObjectId from mongodb
+//addUser() // tested
+//getUser() // tested // Error Handling
+//getAllUsers() // tested // Error Handling
+//addCommentsToUser() //tested // Error Handling
+//getUserComments() // tested // Error Handling
+//userLikesAProduct() // tested // Error Handling
+//getUserLikedProducts() //tested // Error Handling
+//userPurchasesAProduct() // tested // Error Handling
+//userViewsAProduct() //tested // Error Handling
+//getUserViewedProdcuts() //tested // Error Handling
+//getUserBoughtProducts()// tested // Error Handling
+
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 let { ObjectId } = require("mongodb");
+const bcrypt = require("bcryptjs");
+const saltNumber = 14;
+const errorHandler = require("../Error/DatabaseErrorHandling");
 
 module.exports = {
-  async addUser(
-    firstName,
-    lastName,
-    dateOfBirth,
-    age,
-    phoneNumber,
-    emailId,
-    password,
-    address,
-    profilePhoto,
-    reviewsId
-  ) {
-    // Error handling and Checking
-    if (
-      !firstName ||
-      !lastName ||
-      !dateOfBirth ||
-      !age ||
-      !phoneNumber ||
-      !emailId ||
-      !password ||
-      !address ||
-      !profilePhoto ||
-      !reviewsId
-    )
-      throw "All fields Must be provided :- addUser()";
-    if (
-      typeof firstName !== "string" ||
-      firstName.trim().length == 0 ||
-      typeof lastName !== "string" ||
-      lastName.trim().length == 0 ||
-      typeof dateOfBirth !== "string" ||
-      dateOfBirth.trim().length == 0 ||
-      typeof age !== "number" ||
-      age.trim().length == 0 ||
-      typeof phoneNumber !== "number" ||
-      phoneNumber.trim().length == 0 ||
-      typeof emailId !== "string" ||
-      emailId.trim().length == 0
-    )
-      throw "Either provided data is not of proper type or the length of the data is zero :- addUser()";
+  // need to implement if email already exists in the database or not.
 
-    if (typeof address !== "object")
-      throw "Address should be the type of object :-addUser()";
+  async addUser(firstName, lastName, phoneNumber, emailId, password, address) {
+    errorHandler.checkString(firstName, "First Name");
+    errorHandler.checkString(lastName, "Last Name");
+    errorHandler.checkEmail(emailId, "email ID");
+    errorHandler.checkString(password, "Password");
+    errorHandler.checkPhoneNumber(phoneNumber);
+    errorHandler.checkPassword(password);
+    errorHandler.checkAddress(address);
 
-    street = address.street;
-    city = address.city;
-    state = address.state;
-    code = address.code;
+    const hasedPassword = await bcrypt.hash(password, saltNumber);
 
-    if (
-      typeof state !== "string" ||
-      state.trim().length == 0 ||
-      typeof city !== "string" ||
-      city.trim().length == 0 ||
-      typeof street !== "string" ||
-      street.trim().length == 0 ||
-      typeof code !== "string" ||
-      code.trim().length == 0
-    )
-      throw " The provided address info is not of proper type or empty :-addUser()";
-    ////////////////
-    const addUser = await users();
-    // storing the data into an object
     let newUser = {
       firstName: firstName,
       lastName: lastName,
-      dateOfBirth: dateOfBirth,
-      age: age,
-      phoneNumber: phoneNumber,
-      emailId: emailId,
-      password: password,
-      address: {
-        street: street,
-        city: city,
-        state: state,
-        code: code,
-      },
-      profilePhoto: "path or url",
-      reviewsId: [],
+      password: hasedPassword,
+      userCreatedAt: new Date(),
+      mobile: phoneNumber,
+      emailId: emailId.toLowerCase(),
+      address: address,
+      viewHistory: [],
+      LikeHistory: [],
+      comments: [],
+      purchaseHistory: [],
     };
-
+    const addUser = await users();
     const insertedUser = await addUser.insertOne(newUser);
-    if (insertedUser.insertedCount === 0)
-      throw "Could not add User. :-addUser()";
-    const newUserId = await insertedUser.insertedId;
+    if (insertedUser.insertedCount === 0) throw "Could not add User.";
+    const newUserId = await insertedUser.insertedId.toString();
     const addedUser = await this.getUser(newUserId);
     return addedUser;
   },
+
   async getUser(userId) {
-    newId = ObjectId(userId);
-    const userData = await users();
-    const userById = await userData.findOne({ _id: newId });
-    if (userById === null) throw "No user found :- getUser()";
-    userById["_id"] = userById["  _id"].toString();
-    return userById;
+    errorHandler.checkStringObjectId(userId, "User ID");
+    const parsedId = ObjectId(userId);
+    const usersCollection = await users();
+    const user = await usersCollection.findOne({ _id: parsedId });
+    if (user === null) throw "No user found";
+    user["_id"] = user["_id"].toString();
+    return user;
   },
+
   async getAllUsers() {
-    const allUsers = await users();
-    const usersCollection = await allUsers.find({}).toArray();
-    if (usersCollection.length === 0 || usersCollection.length === undefined) {
-      return "Users Data is empty. :- getAllUsers()";
+    const usersCollection = await users();
+    const allUsers = await usersCollection.find({}).toArray();
+    if (allUsers.length === 0 || allUsers.length === undefined) {
+      console.log("Users Data is empty");
+      return [];
     } else {
-      return usersCollection;
+      for (let i of allUsers) {
+        i._id = i._id.toString();
+      }
+      return allUsers;
     }
+  },
+
+  async addCommentsToUser(userID, commentID) {
+    errorHandler.checkStringObjectId(userID, "user ID");
+    errorHandler.checkStringObjectId(commentID, "Comment ID");
+    const usersCollection = await users();
+    const updatedInfo = await usersCollection.updateOne(
+      {
+        _id: ObjectId(userID),
+      },
+      {
+        $push: {
+          comments: ObjectId(commentID),
+        },
+      }
+    );
+
+    if (updatedInfo.updatedCount === 0) throw "Update failed to add a comment!";
+  },
+  async getUserComments(UserID) {
+    errorHandler.checkStringObjectId(UserID, "User ID");
+    const commentsData = require("./index").comments;
+    const user = await this.getUser(UserID);
+    const comments = [];
+    for (comment of user.comments) {
+      console.log(commentsData);
+      comments.push(await commentsData.getComment(comment.toString()));
+    }
+    return comments;
+  },
+
+  async userLikesAProduct(UserID, ProductID) {
+    errorHandler.checkStringObjectId(UserID, "User ID");
+    errorHandler.checkStringObjectId(ProductID, "Product ID");
+    const usersCollection = await users();
+
+    const updatedInfo = await usersCollection.updateOne(
+      {
+        _id: ObjectId(UserID),
+      },
+      {
+        $push: {
+          LikeHistory: ObjectId(ProductID),
+        },
+      }
+    );
+
+    if (updatedInfo.updatedCount === 0)
+      throw "Update failed to add like info to user collection!";
+  },
+  async userDisLikesAProduct(UserID, ProductID) {
+    errorHandler.checkStringObjectId(UserID, "User ID");
+    errorHandler.checkStringObjectId(ProductID, "Product ID");
+    const usersCollection = await users();
+
+    const updatedInfo = await usersCollection.updateOne(
+      {
+        _id: ObjectId(UserID),
+      },
+      {
+        $pull: {
+          LikeHistory: ObjectId(ProductID),
+        },
+      }
+    );
+
+    if (updatedInfo.updatedCount === 0)
+      throw "Update failed to add dislike info to user collection!";
+  },
+
+  async getUserLikedProducts(UserID) {
+    errorHandler.checkStringObjectId(UserID, "User ID");
+    const products = require("./index").products;
+    const user = await this.getUser(UserID);
+
+    const productsList = [];
+    for (productID of user.LikeHistory) {
+      try {
+        productsList.push(await products.getProductById(productID.toString()));
+      } catch (error) {
+        if (error == 4000) {
+          continue;
+        } else {
+          console.log(error);
+          throw "fatel error in getUserLikedProducts function";
+        }
+      }
+    }
+    return productsList;
+  },
+
+  async userPurchasesAProduct(UserID, ProductID) {
+    errorHandler.checkStringObjectId(UserID, "User ID");
+    errorHandler.checkStringObjectId(ProductID, "Product ID");
+    const products = require("./index").products;
+    const usersCollection = await users();
+
+    const updatedInfo = await usersCollection.updateOne(
+      {
+        _id: ObjectId(UserID),
+      },
+      {
+        $push: {
+          purchaseHistory: ObjectId(ProductID),
+        },
+      }
+    );
+
+    if (updatedInfo.updatedCount === 0)
+      throw "Update failed to add purchase info to user collection!";
+
+    await products.updateStockOfProduct(ProductID);
+  },
+
+  async userViewsAProduct(UserID, ProductID) {
+    errorHandler.checkStringObjectId(UserID, "User ID");
+    errorHandler.checkStringObjectId(ProductID, "Product ID");
+    const usersCollection = await users();
+
+    const updatedInfo = await usersCollection.updateOne(
+      {
+        _id: ObjectId(UserID),
+      },
+      {
+        $push: {
+          viewHistory: ObjectId(ProductID),
+        },
+      }
+    );
+
+    if (updatedInfo.updatedCount === 0)
+      throw "Update failed to add view info to user collection!";
+  },
+
+  async getUserViewedProdcuts(UserID) {
+    errorHandler.checkStringObjectId(UserID, "User ID");
+    const products = require("./index").products;
+    const user = await this.getUser(UserID);
+
+    const productsList = [];
+
+    for (productID of user.viewHistory) {
+      try {
+        productsList.push(await products.getProductById(productID.toString()));
+      } catch (error) {
+        if (error == 4000) {
+          continue;
+        } else {
+          console.log(error);
+          throw "fatel error in getUserLikedProducts function";
+        }
+      }
+    }
+    return productsList;
+  },
+
+  async getUserBoughtProducts(UserID) {
+    errorHandler.checkStringObjectId(UserID, "User ID");
+    const products = require("./index").products;
+    const user = await this.getUser(UserID);
+
+    const productsList = [];
+    for (productID of user.purchaseHistory) {
+      try {
+        productsList.push(await products.getProductById(productID.toString()));
+      } catch (error) {
+        if (error == 4000) {
+          continue;
+        } else {
+          console.log(error);
+          throw "fatel error in getUserLikedProducts function";
+        }
+      }
+    }
+    return productsList;
   },
 };
